@@ -244,3 +244,25 @@ def hiddenLayerGenerator(layerPrecedent, numeroLayer):
         label = "HiddenLayer" + str(numeroLayer) + "Neurone" + str(i + 1)
         neurones.append(neuroneGenerator(label, layerPrecedent))
     return Layer("HiddenLayer" + str(numeroLayer) , neurones)
+
+def outputLayerGenerator(layerPrecedent, outputs):
+    """Génère un OutputLayer et le retourne
+
+    Args:
+        layerPrecedent (Layer): Layer précédent sert pour les connexions
+        outputs (string): valeurs d'output du Network
+
+    Returns:
+        Layer: outputLayer du Network
+    """
+    neurones = []
+    for i in range(len(outputs)):
+        label = "OutputNeurone" + str(i + 1)
+        bias = round(random.uniform(-10, 10), 2)
+        inputs = []
+        listeNeuronesLayerPrecedent = layerPrecedent.neurones
+        for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
+            weight = round(random.uniform(0, 10), 2)
+            inputs.append([neurone, weight])
+        neurones.append(OutputNeurone(label, bias, inputs, outputs[i]))
+    return Layer("OutputLayer", neurones)
