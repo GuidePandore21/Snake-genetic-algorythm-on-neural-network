@@ -406,3 +406,15 @@ def mutationCreationLayer(network):
     renameLayerNetworkDecalage(network, randomLayer)
     insererNouveauLayer(network, randomLayer, layer)
     remplacerConnexion(network.layers[randomLayer + 1], layer)
+
+# -------------------- MUTATIONS MODIFICATION (NEURONE BIAS, CONNEXION POIDS) -------------------- #
+
+def mutationModificationNeuroneBias(network):
+    """modifie de manière aléatoire la valeur du bias d'un Neurone dans le Network
+
+    Args:
+        network (Network): Network dans lequel la modification se fait
+    """
+    neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
+    neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
+    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-10, 10), 2)
