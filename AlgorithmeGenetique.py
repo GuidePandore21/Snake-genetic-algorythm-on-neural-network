@@ -418,3 +418,14 @@ def mutationModificationNeuroneBias(network):
     neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
     neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
     neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-10, 10), 2)
+
+def mutationModificationConnexionPoids(network):
+    """modifie de manière aléatoire la valeur du poids d'une connexion entre deux Neurones dans le Network
+
+    Args:
+        network (Network): Network dans lequel la modification se fait
+    """
+    connexionPoidsToModifyLayer = chooseRandomLayer(network)[0]
+    connexionPoidsToModifyNeurone = chooseRandomNeurone(connexionPoidsToModifyLayer)[0]
+    connexionPoidsToModifyConnexion = chooseRandomConnexion(connexionPoidsToModifyNeurone)
+    connexionPoidsToModifyNeurone.inputs[connexionPoidsToModifyConnexion][1] = round(random.random(), 2)
