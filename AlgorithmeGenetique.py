@@ -813,3 +813,17 @@ def afficherMoyenneFitnessGenerations(data):
     plt.ylabel('Fitness Moyenne')
     plt.grid(True)
     plt.show()
+
+def afficherMaxFitnessGenerations(data):
+    """génère un graphe de toutes les valeurs maximales de fitness par génération
+
+    Args:
+        data ([float]): liste des valeurs maximales de fitness
+    """
+
+    plt.plot(range(1, NB_GENERATION + 1), data, linestyle='-')
+    plt.title('Max de Fitness par Génération')
+    plt.xlabel('Génération')
+    plt.ylabel('Fitness Max')
+    plt.grid(True)
+    plt.show()
