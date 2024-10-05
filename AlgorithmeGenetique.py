@@ -110,3 +110,18 @@ def remplacerConnexion(layerSuivant, layerCible):
     for neurone in layerSuivant.neurones:
         temp = neuroneGenerator("trash", layerCible)
         neurone.inputs = temp.inputs
+
+def chooseRandomLayer(network):
+    """choisit de manière aléatoire un Layer dans le Network (inputLayer non inclus)
+
+    Args:
+        network (Network): Network dans lequel on choisit le Layer
+
+    Returns:
+        Layer: Layer choisit de manière aléatoire
+        int: indexLayer
+    """
+    randomLayer = random.randint(1, len(network.layers) - 1)
+    for layerIndex in range(len(network.layers)):
+        if randomLayer == layerIndex:
+            return network.layers[layerIndex], layerIndex
