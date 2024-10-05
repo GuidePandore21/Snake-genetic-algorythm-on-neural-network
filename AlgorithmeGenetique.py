@@ -726,3 +726,20 @@ def reproductionMeilleurMoinsBon(population):
             mutations[randomMutation](newGen[i])
     
     return newGen
+
+# -------------------- CREATION GENERATION -------------------- #
+
+def initGeneration(INPUTS, OUTPUTS):
+    """créer une 1ère génération de Network d'une quantité régie par la Variable Globale POPULATION
+
+    Args:
+        INPUTS (_type_): données input du Network
+        OUTPUTS (_type_): données output du Network
+
+    Returns:
+        [Network]: population (liste Network)
+    """
+    generation = []
+    for i in range(NB_INDIVIDU):
+        generation.append(networkGenerator(INPUTS, OUTPUTS))
+    return generation
