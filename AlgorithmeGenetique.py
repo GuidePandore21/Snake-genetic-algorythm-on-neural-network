@@ -700,3 +700,29 @@ def selectionUniforme(population):
             mutations[randomMutation](newGen[i])
     
     return newGen
+
+def reproductionMeilleurMoinsBon(population):
+    """Reproduction des individu ayant un fitness moindre
+
+    Args:
+        population (Network): génération précédente
+
+    Returns:
+        [Network] : liste d'individu pour la prochaine génération
+    """
+    liste = triRapide(population)
+    
+    newGen = []
+    for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2)):
+        children = croisement(liste[i], liste[- i - 1])
+        newGen.append(children[0])
+        newGen.append(children[1])
+    
+    random.shuffle(newGen)
+    for i in range(len(newGen)):
+        chanceMutation = random.randint(0, 100)
+        if chanceMutation < 100 * MUTATION:
+            randomMutation = random.randint(0, len(mutations) - 1)
+            mutations[randomMutation](newGen[i])
+    
+    return newGen
