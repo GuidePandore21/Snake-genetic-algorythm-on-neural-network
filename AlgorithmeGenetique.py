@@ -227,3 +227,20 @@ def inputLayerGenerator(inputs):
         label = "InputNeurone" + str(i + 1)
         neurones.append(InputNeurone(label, inputs[i]))
     return Layer("InputLayer", neurones)
+
+def hiddenLayerGenerator(layerPrecedent, numeroLayer):
+    """Génère un Hidden Layer et le retourne
+
+    Args:
+        layerPrecedent (Layer): Layer précédent sert pour les connexions
+        numeroLayer (int): numéro du HiddenLayer
+
+    Returns:
+        Layer: HiddenLayer du Network
+    """
+    neurones = []
+    nbNeurones = random.randint(1, NB_MAX_NEURONES_PAR_LAYER + 1)
+    for i in range(nbNeurones):
+        label = "HiddenLayer" + str(numeroLayer) + "Neurone" + str(i + 1)
+        neurones.append(neuroneGenerator(label, layerPrecedent))
+    return Layer("HiddenLayer" + str(numeroLayer) , neurones)
