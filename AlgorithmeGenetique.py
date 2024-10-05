@@ -621,3 +621,17 @@ def mutationSuppressionLayer(network):
     network.renameLayers()
     for layer in network.layers:
         layer.renameNeurones
+
+mutations = [
+    mutationCreationConnexion,
+    mutationCreationNeurone,
+    mutationCreationLayer, 
+    mutationModificationConnexionPoids,
+    mutationModificationNeuroneBias,
+    mutationSwapConnexion,
+    mutationSwapNeurone,
+    mutationSwapLayer,
+    mutationSuppressionConnexion,
+    mutationSuppressionNeurone,
+    mutationSuppressionLayer
+]
