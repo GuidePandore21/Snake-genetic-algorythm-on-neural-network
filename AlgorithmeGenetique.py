@@ -567,3 +567,16 @@ def mutationSwapLayer(network):
             newNeurone.bias = tempBias
             neuronesLayer4.append(newNeurone)
         network.layers[layerToSwap2Index + 1].neurones = neuronesLayer4
+
+# -------------------- MUTATIONS SUPPRESSION (LAYER, NEURONE, CONNEXION) -------------------- #
+
+def mutationSuppressionConnexion(network):
+    """supprime de manière aléatoire une connexion dans le Network
+
+    Args:
+        network (Network): Network dans lequel la suppression se fait
+    """
+    connexionToDeleteLayer = chooseRandomLayer(network)[0]
+    connexionToDeleteNeurone = chooseRandomNeurone(connexionToDeleteLayer)[0]
+    connexionToDelete = chooseRandomConnexion(connexionToDeleteNeurone)
+    connexionToDeleteNeurone.inputs.pop(connexionToDelete)
