@@ -429,3 +429,20 @@ def mutationModificationConnexionPoids(network):
     connexionPoidsToModifyNeurone = chooseRandomNeurone(connexionPoidsToModifyLayer)[0]
     connexionPoidsToModifyConnexion = chooseRandomConnexion(connexionPoidsToModifyNeurone)
     connexionPoidsToModifyNeurone.inputs[connexionPoidsToModifyConnexion][1] = round(random.random(), 2)
+
+# -------------------- MUTATIONS SWAP (LAYER, NEURONE, CONNEXION) -------------------- #
+
+def mutationSwapNeuroneBias(network):
+    """intervertit le bias de deux Neurone de manière aléatoire dans le Network
+
+    Args:
+        network (Network): Network dans lequel se fait le swap
+    """
+    neuroneBiasToSwap1Layer = chooseRandomAllLayer(network)[0]
+    neuroneBiasToSwap1Neurone = chooseRandomNeurone(neuroneBiasToSwap1Layer)[0]
+    neuroneBiasToSwap2Layer = chooseRandomAllLayer(network)[0]
+    neuroneBiasToSwap2Neurone = chooseRandomNeurone(neuroneBiasToSwap2Layer)[0]
+    
+    temp = neuroneBiasToSwap1Neurone.bias
+    neuroneBiasToSwap1Neurone.bias = neuroneBiasToSwap2Neurone.bias
+    neuroneBiasToSwap2Neurone.bias = temp
