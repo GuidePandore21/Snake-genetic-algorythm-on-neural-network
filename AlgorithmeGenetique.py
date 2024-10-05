@@ -476,3 +476,29 @@ def mutationSwapConnexion(network):
         temp = connexionToSwap1Neurone.inputs[connexionToSwap1]
         connexionToSwap1Neurone.inputs[connexionToSwap1] = connexionToSwap2Neurone.inputs[connexionToSwap2]
         connexionToSwap2Neurone.inputs[connexionToSwap2] = temp
+
+def mutationSwapNeurone(network):
+    """intervertit deux Neurone de manière aléatoire dans le Network
+
+    Args:
+        network (Network): Network dans lequel se fait le swap
+
+    Returns:
+        _type_: return -1 en cas d'impossibilité de faire le swap
+    """
+    neuroneToSwap1Layer, neuroneToSwap1LayerIndex = chooseRandomHiddenLayer(network)
+    neuroneToSwap1, neuroneToSwap1Index  = chooseRandomNeurone(neuroneToSwap1Layer)
+    neuroneToSwap2Layer, neuroneToSwap2LayerIndex = chooseRandomHiddenLayer(network)
+    neuroneToSwap2, neuroneToSwap2Index = chooseRandomNeurone(neuroneToSwap2Layer)
+    
+    if neuroneToSwap1Layer == neuroneToSwap2Layer:
+        return -1
+    
+    tempBias = neuroneToSwap1.bias
+    neuroneToSwap1 = neuroneGenerator(neuroneToSwap1.label, network.layers[neuroneToSwap1LayerIndex - 1])
+    neuroneToSwap1.bias = neuroneToSwap2.bias
+    neuroneToSwap2 = neuroneGenerator(neuroneToSwap2.label, network.layers[neuroneToSwap2LayerIndex - 1])
+    neuroneToSwap2.bias = tempBias
+    
+    network.layers[neuroneToSwap1LayerIndex].neurones[neuroneToSwap1Index] = neuroneToSwap1
+    network.layers[neuroneToSwap2LayerIndex].neurones[neuroneToSwap2Index] = neuroneToSwap2
