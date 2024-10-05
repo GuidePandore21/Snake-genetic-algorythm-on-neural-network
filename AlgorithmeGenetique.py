@@ -212,3 +212,18 @@ def neuroneGenerator(label, layerPrecedent):
         weight = round(random.uniform(0, 10), 2)
         inputs.append([neurone, weight])
     return Neurone(label, bias, inputs)
+
+def inputLayerGenerator(inputs):
+    """Génère un input layer et le retourne
+
+    Args:
+        inputs (float): valeur d'input du Network
+
+    Returns:
+        Layer: inputLayer du Network
+    """
+    neurones = []
+    for i in range(len(inputs)):
+        label = "InputNeurone" + str(i + 1)
+        neurones.append(InputNeurone(label, inputs[i]))
+    return Layer("InputLayer", neurones)
