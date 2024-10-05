@@ -72,3 +72,20 @@ def trouverElementsNonConnexes(elementsPresent, elementsCible):
         if elementCible not in elementsPresent:
             res.append(elementCible)
     return res
+
+def renameLayerNetworkDecalage(network, index):
+    """renome tout les Layer à partir de l'index car insertion d'un précédent Layer
+
+    Args:
+        network (Network): Network dans lequel le renomage se fait
+        index (int): index à partir du quel il faut renomer (index d'insertion du Layer)
+    """
+    compteurLayeur = 0
+    for layer in network.layers:
+        if compteurLayeur >= index and compteurLayeur < len(network.layers) - 1:
+            layer.label = "HiddenLayer" + str(compteurLayeur + 1)
+            compteurNeurone = 0
+            for neurone in layer.neurones:
+                neurone.label = layer.label + "Neurone" + str(compteurNeurone + 1)
+                compteurNeurone += 1
+        compteurLayeur += 1
