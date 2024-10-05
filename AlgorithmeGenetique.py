@@ -665,3 +665,38 @@ def selectionParAdaptation(population):
             participants.append(individu)
     
     return choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
+
+def selectionUniforme(population):
+    """Choisit de manière aléatoire des Network à dupliquer pour la prochaine génération
+
+    Args:
+        population (Network): génération précédente
+
+    Returns:
+        [Network] : liste d'individu pour la prochaine génération
+    """
+    liste = population
+    random.shuffle(liste)
+    selectionnes = []
+    
+    nbSelectionnes = int(NB_INDIVIDU * ELITE * ELITE_RATIO_UNIFORME / 2)
+    if nbSelectionnes % 2 == 1:
+        nbSelectionnes -= 1
+        
+    for i in range(int(nbSelectionnes) - 1):
+        selectionnes.append(liste[i])
+    
+    newGen = []
+    for i in range(0, len(selectionnes) - 1, 2):
+        children = croisement(selectionnes[i], selectionnes[i + 1])
+        newGen.append(children[0])
+        newGen.append(children[1])
+    
+    random.shuffle(newGen)
+    for i in range(len(newGen)):
+        chanceMutation = random.randint(0, 100)
+        if chanceMutation < 100 * MUTATION:
+            randomMutation = random.randint(0, len(mutations) - 1)
+            mutations[randomMutation](newGen[i])
+    
+    return newGen
