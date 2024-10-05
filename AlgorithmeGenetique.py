@@ -649,3 +649,19 @@ def selectionParRang(population):
         # else:
             elite.append(listeTriee[-i])
     return elite
+
+def selectionParAdaptation(population):
+    """Choisit, dans une liste d'individu dupliqué en fonction de leurs fitness, un nombre d'individu pour la prochaine population
+
+    Args:
+        population (Network): liste des Network
+
+    Returns:
+        [Network]: liste des Network pour la prochaine population
+    """
+    participants = []
+    for individu in population:
+        for i in range(individu.fitness):
+            participants.append(individu)
+    
+    return choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
