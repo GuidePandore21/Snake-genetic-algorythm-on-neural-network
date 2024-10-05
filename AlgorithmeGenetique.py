@@ -174,3 +174,21 @@ def chooseRandomNeurone(layer):
     for neuroneIndex in range(len(layer.neurones)):
         if randomNeurone == neuroneIndex:
             return layer.neurones[neuroneIndex], neuroneIndex
+
+def chooseRandomConnexion(neurone):
+    """choisit de manière aléatoire l'index d'une connexion dans un Neurone
+
+    Args:
+        neurone (Neurone): Neurone dans lequel on choisit la connexion
+
+    Returns:
+        int: index
+    """
+    try:
+        randomConnexion = random.randint(0, len(neurone.inputs) - 1)
+    except Exception as e:
+        print("Impossible de choisir une connexion")
+        return -1
+    for connexionIndex in range(len(neurone.inputs)):
+        if randomConnexion == connexionIndex:
+            return randomConnexion
