@@ -111,11 +111,6 @@ def generationPommeApprentissage(DIS_WIDTH, DIS_HEIGHT):
         
     return pommes
 
-def generationPommeApprentissageTest(DIS_WIDTH, DIS_HEIGHT):
-    pommes = []
-    
-    return pommes
-
 def afficherPommes(pommes, DIS_WIDTH, DIS_HEIGHT):
     """Affiche un graphe de visualization de l'emplacement des pommes
 
