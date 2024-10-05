@@ -304,3 +304,53 @@ def createLayerConnexion(layer, layerPrecedent):
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     return layer
+
+# -------------------- CROISEMENT -------------------- #
+
+def croisement(individu1, individu2):
+    """génère deux fils de deux individus en croisant leurs parties
+        individu1 = AB
+        individu2 = CD
+        child1 = AD
+        child2 = CB
+
+    Args:
+        individu1 (Network): premier parent
+        individu2 (Network): deuxième parent
+
+    Returns:
+        Network: retourne les deux fils des deux individus (AD) (CB)
+    """
+    layersChild1 = []
+    layersChild2 = []
+    
+    randomSeparationIndividu1 = random.randint(1, len(individu1.layers) - 2)
+    randomSeparationIndividu2 = random.randint(1, len(individu2.layers) - 2)
+    
+    for i in range(0, randomSeparationIndividu1):
+        layersChild1.append(individu1.layers[i])
+    for i in range(randomSeparationIndividu2, len(individu2.layers)):
+        layersChild1.append(individu2.layers[i])
+
+    child1 = Network(layersChild1)
+    child1.renameLayers()
+    for layer in child1.layers:
+        layer.renameNeurones()
+    
+    for i in range(1, len(child1.layers)):
+        createLayerConnexion(child1.layers[i], child1.layers[i - 1])
+        
+    for i in range(0, randomSeparationIndividu2):
+        layersChild2.append(individu2.layers[i])
+    for i in range(randomSeparationIndividu1, len(individu1.layers)):
+        layersChild2.append(individu1.layers[i])
+
+    child2 = Network(layersChild2)
+    child2.renameLayers()
+    for layer in child1.layers:
+        layer.renameNeurones()
+    
+    for i in range(1, len(child2.layers)):
+        createLayerConnexion(child2.layers[i], child2.layers[i - 1])
+    
+    return child1, child2
