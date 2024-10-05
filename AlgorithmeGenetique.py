@@ -580,3 +580,23 @@ def mutationSuppressionConnexion(network):
     connexionToDeleteNeurone = chooseRandomNeurone(connexionToDeleteLayer)[0]
     connexionToDelete = chooseRandomConnexion(connexionToDeleteNeurone)
     connexionToDeleteNeurone.inputs.pop(connexionToDelete)
+
+def mutationSuppressionNeurone(network):
+    """supprime de manière aléatoire un Neurone dans le Network
+
+    Args:
+        network (Network): Network dans lequel le suppression se fait
+    """
+    neuroneToDeleteLayer, neuroneToDeleteLayerIndex = chooseRandomHiddenLayer(network)
+    neuroneToDeleteNeurone, neuroneToDeleteNeuroneIndex = chooseRandomNeurone(neuroneToDeleteLayer)
+    
+    if len(neuroneToDeleteLayer.neurones) <= 1:
+        return -1
+    
+    for neurone in network.layers[neuroneToDeleteLayerIndex + 1].neurones:
+        for i in range(len(neurone.inputs)):
+            if neurone.inputs[i][0] == neuroneToDeleteNeurone:
+                neurone.inputs.pop(i)
+                break
+                
+    neuroneToDeleteLayer.neurones.pop(neuroneToDeleteNeuroneIndex)
