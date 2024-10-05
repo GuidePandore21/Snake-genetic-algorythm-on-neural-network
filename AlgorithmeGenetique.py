@@ -794,3 +794,22 @@ def maxFitnessPopulation(population):
     """
     listeTriee = triRapide(population)
     return listeTriee[-1].fitness
+
+def afficherMoyenneFitnessGenerations(data):
+    """génère un graphe de toutes les moyennes de fitness par génération
+
+    Args:
+        data ([float]): liste des moyennes de fitness
+    """
+    somme = 0
+    for moyenne in data:
+        somme += moyenne
+    
+    print("Moyenne Fitness : ", somme / NB_GENERATION)
+    
+    plt.plot(range(1, NB_GENERATION + 1), data, linestyle='-')
+    plt.title('Moyenne de Fitness par Génération')
+    plt.xlabel('Génération')
+    plt.ylabel('Fitness Moyenne')
+    plt.grid(True)
+    plt.show()
