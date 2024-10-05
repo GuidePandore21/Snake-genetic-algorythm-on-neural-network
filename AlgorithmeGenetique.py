@@ -155,3 +155,22 @@ def chooseRandomHiddenLayer(network):
     for layerIndex in range(len(network.layers)):
         if randomLayer == layerIndex:
             return network.layers[layerIndex], layerIndex
+
+def chooseRandomNeurone(layer):
+    """choisit de manière aléatoire un Neurone dans un Layer
+
+    Args:
+        layer (Layer): Layer dans lequel on choisit le Neurone
+
+    Returns:
+        Neurone: Neurone choisit de manière aléatoire
+        int: index Neurone
+    """
+    try:
+        randomNeurone = random.randint(0, len(layer.neurones) - 1)
+    except Exception as e:
+        print("Impossible de choisir un Neurone")
+        return -1
+    for neuroneIndex in range(len(layer.neurones)):
+        if randomNeurone == neuroneIndex:
+            return layer.neurones[neuroneIndex], neuroneIndex
