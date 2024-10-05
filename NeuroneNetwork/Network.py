@@ -67,3 +67,14 @@ class Network:
         self.layers[len(self.layers) - 1].label = "OutputLayer"
         for i in range(1, len(self.layers) - 1):
             self.layers[i].label = "HiddenLayer" + str(i)
+    
+    def representation(self):
+        """retourne un dictionnaire contenant la liste des Layer du Neurone
+
+        Returns:
+            Layer: dictionnaire contenant la liste des Layer du Neurone
+        """
+        network = {}
+        for layer in self.layers:
+            network[layer.label] = layer.representation()
+        return network
