@@ -266,3 +266,23 @@ def outputLayerGenerator(layerPrecedent, outputs):
             inputs.append([neurone, weight])
         neurones.append(OutputNeurone(label, bias, inputs, outputs[i]))
     return Layer("OutputLayer", neurones)
+
+def networkGenerator(inputs, outputs):
+    """Génère un Network et le retourne
+
+    Args:
+        inputs (float): valeur d'input du Network
+        outputs (string): valeurs d'output du Network
+
+    Returns:
+        Network: Network généré
+    """
+    layers = [inputLayerGenerator(inputs)]
+    
+    nbHiddenLayer = random.randint(1, NB_MAX_LAYER_PAR_NETWORK + 1)
+    for i in range(nbHiddenLayer):
+        layers.append(hiddenLayerGenerator(layers[len(layers) - 1], i + 1))
+    
+    layers.append(outputLayerGenerator(layers[len(layers) - 1], outputs))
+    
+    return Network(layers)
