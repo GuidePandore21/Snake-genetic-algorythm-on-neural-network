@@ -25,3 +25,21 @@ def triRapide(liste):
         infAPivot = [objet for objet in liste[1:] if objet.fitness <= pivot]
         supAPivot = [objet for objet in liste[1:] if objet.fitness > pivot]
         return triRapide(infAPivot) + [liste[0]] + triRapide(supAPivot)
+    
+def choisirDansListeSansRemise(liste):
+    """retourne au minimum un élément de la liste placé en paramètre avec un tirage sans remise
+
+    Args:
+        liste (Neurone): liste de Neurone
+
+    Returns:
+        Neurone: retourne une liste de Neurone
+    """
+    if len(liste) == 0:
+        nbLiens = 0
+    elif len(liste) == 1:
+        nbLiens = 1
+    else:
+        nbLiens = random.randint(1, len(liste))
+    tirage = random.sample(liste, nbLiens)
+    return tirage
