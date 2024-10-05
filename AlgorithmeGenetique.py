@@ -99,3 +99,14 @@ def insererNouveauLayer(network, index , layer):
         layer (Layer): Layer qu'il faut insérer
     """
     network.layers.insert(index, layer)
+
+def remplacerConnexion(layerSuivant, layerCible):
+    """créer des nouvelles connexion qui remplace les précédentes entre deux Layer
+
+    Args:
+        layerSuivant (Layer): Layer N + 1 par rapport à la cible
+        layerCible (Layer): Layer où vont les connexions
+    """
+    for neurone in layerSuivant.neurones:
+        temp = neuroneGenerator("trash", layerCible)
+        neurone.inputs = temp.inputs
