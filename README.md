@@ -1,0 +1,1 @@
+# Snake-genetic-algorythm-on-neuron-network
