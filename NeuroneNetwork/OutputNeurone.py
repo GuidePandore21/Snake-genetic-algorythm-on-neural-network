@@ -12,3 +12,16 @@ class OutputNeurone(Neurone):
         self.inputs = inputs
         self.valeurOutput = valeurOutput
         self.output = 0
+
+    def forwardPropagation(self):
+        """retourne la valeur du calcul de la forward propagation avec les inputs du Neurone et le bias
+        Fonction : ∑ wi * xi + biais
+
+        Returns:
+            float: valeur du calcul de la forward propagation
+        """
+        calcul = self.bias
+        for input in self.inputs:
+            calcul += input[0].output * input[1]
+        self.output = self.activation(calcul)
+        return self.output
