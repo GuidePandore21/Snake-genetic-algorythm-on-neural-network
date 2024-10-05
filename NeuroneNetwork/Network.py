@@ -31,3 +31,24 @@ class Network:
         self.fitness += fitness
         self.layers[0].neurones[2].inputData = foodx
         self.layers[0].neurones[3].inputData = foody
+    
+    def outputNetwork(self):
+        """Retourne la valeur de sortie du Network
+
+        Returns:
+            string: valeur de sortie
+        """
+        outputs = []
+        for layer in self.layers:
+            for neurone in layer.neurones:
+                if layer.label == "OutputLayer":
+                    outputs.append(neurone.forwardPropagation())
+                else:
+                    neurone.forwardPropagation()
+        
+        indexMax = 0
+        for i in range(1, len(outputs)):
+            if outputs[indexMax] < outputs[i]:
+                indexMax = i
+                
+        return self.layers[len(self.layers) - 1].neurones[indexMax].valeurOutput
