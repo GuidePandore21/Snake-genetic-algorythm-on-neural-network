@@ -377,4 +377,20 @@ def mutationCreationConnexion(network):
                 print("Impossible d'ajouter une connexion")
                 return -1
             weight = round(random.uniform(0, 10), 2)
-            network.layers[layer].neurones[randomNeurone].inputs.append([listeNeuronesNonConnexes[randomNeuroneNonConnexes], weight]) 
+            network.layers[layer].neurones[randomNeurone].inputs.append([listeNeuronesNonConnexes[randomNeuroneNonConnexes], weight])
+
+def mutationCreationNeurone(network):
+    """créer un Neurone de manière aléatoire dans le Network
+
+    Args:
+        network (Network): Network dans lequel la création se fait
+    """
+    randomLayer = random.randint(1, len(network.layers) - 2)
+    for layer in range(len(network.layers)):
+        if randomLayer == layer:
+            label = "HiddenLayer" + str(layer + 1) + "Neurone" + str(network.layers[layer].neurones)
+            network.layers[layer].neurones.append(neuroneGenerator(label, network.layers[layer - 1]))
+            listeNeuroneAConnecter = choisirDansListeSansRemise(network.layers[layer + 1].neurones)
+            for neurone in listeNeuroneAConnecter:
+                weight = round(random.uniform(0, 10), 2)
+                neurone.inputs.append([network.layers[layer].neurones[len(network.layers[layer].neurones) - 1], weight])
