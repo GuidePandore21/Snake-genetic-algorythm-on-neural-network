@@ -600,3 +600,24 @@ def mutationSuppressionNeurone(network):
                 break
                 
     neuroneToDeleteLayer.neurones.pop(neuroneToDeleteNeuroneIndex)
+
+def mutationSuppressionLayer(network):
+    """supprime de manière aléatoire un HiddenLayer dans le Network
+
+    Args:
+        network (Network): Network dans lequel la suppression se fait
+    """
+    layerToDeleteIndex = chooseRandomHiddenLayer(network)[1]
+    for neurone in network.layers[layerToDeleteIndex + 1].neurones:
+        inputs = []
+        listeNeuronesLayerPrecedent = network.layers[layerToDeleteIndex - 1].neurones
+        for neuroneCible in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
+            weight = round(random.uniform(0, 10), 2)
+            inputs.append([neuroneCible, weight])
+        neurone.inputs = inputs
+    
+    network.layers.pop(layerToDeleteIndex)
+    
+    network.renameLayers()
+    for layer in network.layers:
+        layer.renameNeurones
