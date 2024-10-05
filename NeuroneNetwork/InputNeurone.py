@@ -9,3 +9,13 @@ class InputNeurone(Neurone):
         """
         self.label = label
         self.inputData = inputData
+
+    def forwardPropagation(self):
+        """retourne la valeur du calcul de la forward propagation avec les inputs du Neurone et le bias
+        Fonction : ∑ xi
+
+        Returns:
+            float: valeur du calcul de la forward propagation
+        """
+        self.output = self.inputData
+        return self.output
