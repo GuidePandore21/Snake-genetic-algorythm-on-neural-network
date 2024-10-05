@@ -502,3 +502,68 @@ def mutationSwapNeurone(network):
     
     network.layers[neuroneToSwap1LayerIndex].neurones[neuroneToSwap1Index] = neuroneToSwap1
     network.layers[neuroneToSwap2LayerIndex].neurones[neuroneToSwap2Index] = neuroneToSwap2
+
+def mutationSwapLayer(network):
+    """intervertit deux HiddenLayer de manière aléatoire dans le Network
+
+    Args:
+        network (Network): Network dans lequel le swap se fait
+
+    Returns:
+        int: return -1 en cas d'impossibilité de faire le swap
+    """
+    layerToSwap1, layerToSwap1Index = chooseRandomHiddenLayer(network)
+    layerToSwap2, layerToSwap2Index = chooseRandomHiddenLayer(network)
+    
+    # solution temporaire pour outputlayer -> pb creation Neurone à la place OutPutNeurone
+    if layerToSwap1 == layerToSwap2 or network.layers[layerToSwap1Index + 1].label == "OutputLayer" or network.layers[layerToSwap2Index + 1].label == "OutputLayer":
+        return -1
+    
+    if layerToSwap1Index > layerToSwap2Index:
+        temp = layerToSwap1
+        layerToSwap1 = layerToSwap2
+        layerToSwap2 = temp
+        
+        temp = layerToSwap1Index
+        layerToSwap1Index = layerToSwap2Index
+        layerToSwap2Index = temp
+
+    tempNeurones1 = network.layers[layerToSwap1Index].neurones
+    
+    neuronesLayer1 = []
+    for neurone in layerToSwap2.neurones:
+        tempBias = neurone.bias
+        newNeurone = neuroneGenerator(neurone.label, network.layers[layerToSwap1Index - 1])
+        newNeurone.bias = tempBias
+        neuronesLayer1.append(newNeurone)
+    
+    network.layers[layerToSwap1Index].neurones = neuronesLayer1
+    network.layers[layerToSwap1Index].renameNeurones()
+    
+    neuronesLayer2 = []
+    for neurone in tempNeurones1:
+        tempBias = neurone.bias
+        newNeurone = neuroneGenerator(neurone.label, network.layers[layerToSwap2Index - 1])
+        newNeurone.bias = tempBias
+        neuronesLayer2.append(newNeurone)
+        
+    network.layers[layerToSwap2Index].neurones = neuronesLayer2
+    network.layers[layerToSwap2Index].renameNeurones()
+    
+    if layerToSwap1Index + 1 != layerToSwap2Index:
+        neuronesLayer3 = []
+        for neurone in network.layers[layerToSwap1Index + 1].neurones:
+            tempBias = neurone.bias
+            newNeurone = neuroneGenerator(neurone.label, network.layers[layerToSwap1Index])
+            newNeurone.bias = tempBias
+            neuronesLayer3.append(newNeurone)
+        network.layers[layerToSwap1Index + 1].neurones = neuronesLayer3
+    
+    if layerToSwap2Index + 1 != layerToSwap1Index:
+        neuronesLayer4 = []
+        for neurone in network.layers[layerToSwap2Index + 1].neurones:
+            tempBias = neurone.bias
+            newNeurone = neuroneGenerator(neurone.label, network.layers[layerToSwap2Index])
+            newNeurone.bias = tempBias
+            neuronesLayer4.append(newNeurone)
+        network.layers[layerToSwap2Index + 1].neurones = neuronesLayer4
