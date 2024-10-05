@@ -56,3 +56,19 @@ def choisirDansListeSansRemiseNombre(liste, nombre):
     """
     tirage = random.sample(liste, nombre)
     return tirage
+
+def trouverElementsNonConnexes(elementsPresent, elementsCible):
+    """retourne la liste des éléments non connexes entre ces deux listes
+
+    Args:
+        elementsPresent (all): liste élément présent
+        elementsCible (all): liste élément à analyser
+
+    Returns:
+        all: liste des éléments non connexes
+    """
+    res = []
+    for elementCible in elementsCible:
+        if elementCible not in elementsPresent:
+            res.append(elementCible)
+    return res
