@@ -89,3 +89,13 @@ def renameLayerNetworkDecalage(network, index):
                 neurone.label = layer.label + "Neurone" + str(compteurNeurone + 1)
                 compteurNeurone += 1
         compteurLayeur += 1
+
+def insererNouveauLayer(network, index , layer):
+    """insert un nouveau Layer dans le Network au bonne endroit dans la liste
+
+    Args:
+        network (Network): Network dans lequel l'insertion se fait
+        index (int): index d'insertion du Layer
+        layer (Layer): Layer qu'il faut insérer
+    """
+    network.layers.insert(index, layer)
