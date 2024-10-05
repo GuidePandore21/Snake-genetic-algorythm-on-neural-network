@@ -59,3 +59,11 @@ class Network:
         for layer in self.layers:
             for neurone in layer.neurones:
                 print(neurone.label, ": Valeur Output :", neurone.output)
+
+    def renameLayers(self):
+        """Rename les layers (utile entre deux génération pour les modifications des Network)
+        """
+        self.layers[0].label = "InputLayer"
+        self.layers[len(self.layers) - 1].label = "OutputLayer"
+        for i in range(1, len(self.layers) - 1):
+            self.layers[i].label = "HiddenLayer" + str(i)
