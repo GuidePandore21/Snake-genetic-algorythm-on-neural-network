@@ -43,3 +43,16 @@ def choisirDansListeSansRemise(liste):
         nbLiens = random.randint(1, len(liste))
     tirage = random.sample(liste, nbLiens)
     return tirage
+
+def choisirDansListeSansRemiseNombre(liste, nombre):
+    """retourne au minimum un élément de la liste placé en paramètre avec un tirage sans remise
+
+    Args:
+        liste (Neurone): liste de Neurone
+        nombre (int): nombre de fois que l'on fait le tirage
+
+    Returns:
+        Neurone: retourne une liste de Neurone
+    """
+    tirage = random.sample(liste, nombre)
+    return tirage
