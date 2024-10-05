@@ -354,3 +354,27 @@ def croisement(individu1, individu2):
         createLayerConnexion(child2.layers[i], child2.layers[i - 1])
     
     return child1, child2
+
+# -------------------- MUTATIONS CREATION (LAYER, NEURONE, CONNEXION) -------------------- #
+
+def mutationCreationConnexion(network):
+    """créer une connexion de manière aléatoire dans un Network
+
+    Args:
+        network (Network): Network dans lequel la création se fait
+
+    Returns:
+        int: retourne -1 si ne peut pas créer la connexion
+    """
+    randomLayer = random.randint(1, len(network.layers) - 1)
+    for layer in range(len(network.layers)):
+        if randomLayer == layer:
+            randomNeurone = random.randint(0, len(network.layers[layer].neurones) - 1)
+            listeNeuronesNonConnexes = trouverElementsNonConnexes(network.layers[layer].neurones[randomNeurone].inputs[0], network.layers[layer - 1].neurones)
+            try:
+                randomNeuroneNonConnexes = random.randint(0, len(listeNeuronesNonConnexes) - 1)
+            except Exception as e:
+                print("Impossible d'ajouter une connexion")
+                return -1
+            weight = round(random.uniform(0, 10), 2)
+            network.layers[layer].neurones[randomNeurone].inputs.append([listeNeuronesNonConnexes[randomNeuroneNonConnexes], weight]) 
