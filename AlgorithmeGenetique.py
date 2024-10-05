@@ -635,3 +635,17 @@ mutations = [
     mutationSuppressionNeurone,
     mutationSuppressionLayer
 ]
+
+# -------------------- SELECTIONS MEILLEUR INDIVIDU -------------------- #
+
+def selectionParRang(population):
+    elite = []
+    listeTriee = triRapide(population)
+    for i in range(1, int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)):
+        # if listeTriee[-i].fitness >= 100:
+        #     for j in range(5-i):
+        #         elite.append(listeTriee[-i])
+        #     elite.append(listeTriee[-i])
+        # else:
+            elite.append(listeTriee[-i])
+    return elite
