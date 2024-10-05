@@ -1,3 +1,5 @@
+import networkx as nx
+import matplotlib.pyplot as plt
 class Network:
     def __init__(self, layers) -> None:
         """Constructeur de la classe Network
@@ -78,3 +80,36 @@ class Network:
         for layer in self.layers:
             network[layer.label] = layer.representation()
         return network
+    
+    def drawNeuroneNetwork(self):
+        """Dessine sous forme d'un graphe le Network en paramètre
+        """
+        G = nx.Graph()
+        
+        for layer in self.representation():
+            for neurone in self.representation()[layer]:
+                G.add_node(neurone.label)
+                
+        for layer in self.representation():
+            if layer != "InputLayer":
+                for neurone in self.representation()[layer]:
+                    for input in neurone.inputs:
+                        G.add_edge(input[0].label, neurone.label, weight = input[1])
+        
+        edge_labels = nx.get_edge_attributes(G, 'weight')
+        
+        pos = {}
+        y = 0
+        compteur = 0
+        for layer in self.representation():
+            x = compteur * 2
+            for neurone in self.representation()[layer]:
+                pos[neurone.label] = (x, y)
+                y -= 1
+            y = 0
+            compteur += 1
+        
+        nx.draw(G, pos, with_labels=False, node_size=500, node_color='skyblue', font_size=10)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+        plt.title("Réseau de Neurones")
+        plt.show()
