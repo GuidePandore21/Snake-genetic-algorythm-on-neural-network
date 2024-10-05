@@ -192,3 +192,23 @@ def chooseRandomConnexion(neurone):
     for connexionIndex in range(len(neurone.inputs)):
         if randomConnexion == connexionIndex:
             return randomConnexion
+
+# -------------------- CREATION INDIVIDU -------------------- #
+
+def neuroneGenerator(label, layerPrecedent):
+    """génère de manière aléatoire un Neurone
+
+    Args:
+        label (string): label du neurone
+        layerPrecedent (Layer): Layer avec lequel le Neurone doit faire ses connexions
+
+    Returns:
+        Neurone: Neurone créé
+    """
+    bias = round(random.uniform(-10, 10), 2)
+    inputs = []
+    listeNeuronesLayerPrecedent = layerPrecedent.neurones
+    for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
+        weight = round(random.uniform(0, 10), 2)
+        inputs.append([neurone, weight])
+    return Neurone(label, bias, inputs)
