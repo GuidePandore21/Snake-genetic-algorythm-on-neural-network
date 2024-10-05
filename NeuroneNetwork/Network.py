@@ -52,3 +52,10 @@ class Network:
                 indexMax = i
                 
         return self.layers[len(self.layers) - 1].neurones[indexMax].valeurOutput
+    
+    def printOutputNetwork(self):
+        """Affiche toutes les valeurs de sortie possible du Network
+        """
+        for layer in self.layers:
+            for neurone in layer.neurones:
+                print(neurone.label, ": Valeur Output :", neurone.output)
