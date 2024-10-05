@@ -782,3 +782,15 @@ def moyenneFitnessPopulation(population):
     for individu in population:
         somme += individu.fitness
     return somme / NB_INDIVIDU
+
+def maxFitnessPopulation(population):
+    """retourne la valeur maximale de la fitness des Network de la population
+
+    Args:
+        population ([Network]): population cible
+
+    Returns:
+        float: fitness max
+    """
+    listeTriee = triRapide(population)
+    return listeTriee[-1].fitness
