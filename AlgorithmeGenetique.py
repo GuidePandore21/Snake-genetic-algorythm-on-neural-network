@@ -140,3 +140,18 @@ def chooseRandomAllLayer(network):
     for layerIndex in range(len(network.layers)):
         if randomLayer == layerIndex:
             return network.layers[layerIndex], layerIndex
+
+def chooseRandomHiddenLayer(network):
+    """choisit de manière aléatoire un hidden Layer dans le Network
+
+    Args:
+        network (Network): Network dans lequel on choisit le Layer
+
+    Returns:
+        Layer: hidden Layer choisit de manière aléatoire
+        int: index Layer
+    """
+    randomLayer = random.randint(1, len(network.layers) - 2)
+    for layerIndex in range(len(network.layers)):
+        if randomLayer == layerIndex:
+            return network.layers[layerIndex], layerIndex
