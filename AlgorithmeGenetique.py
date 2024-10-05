@@ -767,3 +767,18 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     # random.shuffle(newGen)
     
     return newGen
+
+# -------------------- ANALYSE -------------------- #
+def moyenneFitnessPopulation(population):
+    """Calcul et retourne la moyenne des score de fitness d'une population
+
+    Args:
+        population ([Network]): population cible
+
+    Returns:
+        float: moyenne des fitness
+    """
+    somme = 0
+    for individu in population:
+        somme += individu.fitness
+    return somme / NB_INDIVIDU
