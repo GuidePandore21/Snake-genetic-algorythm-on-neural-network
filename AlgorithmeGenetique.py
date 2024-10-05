@@ -743,3 +743,27 @@ def initGeneration(INPUTS, OUTPUTS):
     for i in range(NB_INDIVIDU):
         generation.append(networkGenerator(INPUTS, OUTPUTS))
     return generation
+
+def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
+    """Génère la prochaine génération d'individu
+
+    Args:
+        populationPrecedente ([Network]): génération précédente
+        INPUTS ([tout]): liste des inputs du Network
+        OUTPUTS ([tout]): liste des outputs du Network
+
+    Returns:
+        [Network]: Nouvelle génération
+    """
+    newGen = []
+    newGen += selectionParRang(populationPrecedente)
+    newGen += selectionParAdaptation(populationPrecedente)
+    newGen += selectionUniforme(populationPrecedente)
+    newGen += reproductionMeilleurMoinsBon(populationPrecedente)
+    
+    while len(newGen) != NB_INDIVIDU:
+        newGen.append(networkGenerator(INPUTS, OUTPUTS))
+    
+    # random.shuffle(newGen)
+    
+    return newGen
