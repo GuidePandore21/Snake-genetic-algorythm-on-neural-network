@@ -286,3 +286,21 @@ def networkGenerator(inputs, outputs):
     layers.append(outputLayerGenerator(layers[len(layers) - 1], outputs))
     
     return Network(layers)
+
+def createLayerConnexion(layer, layerPrecedent):
+    """Génère les connexions entres les neurones de deux layer et retourne le layer
+
+    Args:
+        layer (Layer): layer à connecter
+        layerPrecedent (Layer): layer cible
+
+    Returns:
+        Layer: Layer connecté au Layer cible
+    """
+    for neurone in layer.neurones:
+        inputs = []
+        for neuroneCible in choisirDansListeSansRemise(layerPrecedent.neurones):
+            weight = round(random.uniform(0, 10), 2)
+            inputs.append([neuroneCible, weight])
+        neurone.inputs = inputs
+    return layer
