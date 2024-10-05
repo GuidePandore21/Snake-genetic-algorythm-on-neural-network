@@ -394,3 +394,15 @@ def mutationCreationNeurone(network):
             for neurone in listeNeuroneAConnecter:
                 weight = round(random.uniform(0, 10), 2)
                 neurone.inputs.append([network.layers[layer].neurones[len(network.layers[layer].neurones) - 1], weight])
+
+def mutationCreationLayer(network):
+    """créer un Layer de manière aléatoire dans le Network
+
+    Args:
+        network (Network): Network dans lequel la création se fait
+    """
+    randomLayer = random.randint(1, len(network.layers) - 1)
+    layer = hiddenLayerGenerator(network.layers[randomLayer - 1], randomLayer)
+    renameLayerNetworkDecalage(network, randomLayer)
+    insererNouveauLayer(network, randomLayer, layer)
+    remplacerConnexion(network.layers[randomLayer + 1], layer)
