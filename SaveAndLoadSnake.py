@@ -23,5 +23,6 @@ def saveNetwork(Network, cheminFichier):
                 fichier.write(Network.layers[i].neurones[j].label + "\n")
                 if i != 0:
                     fichier.write(str(Network.layers[i].neurones[j].bias) + "\n")
+                    fichier.write(str(len(Network.layers[i].neurones[j].inputs)) + "\n")
                     for k in range(len(Network.layers[i].neurones[j].inputs)):
                         fichier.write(Network.layers[i].neurones[j].inputs[k][0].label + " " + str(Network.layers[i].neurones[j].inputs[k][1]) + "\n")
