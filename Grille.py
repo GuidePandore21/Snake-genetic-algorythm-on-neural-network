@@ -18,4 +18,17 @@ class Grille:
             valeur (int): valeur dont va hériter la case, prends une de ces valeurs [-1, 0, 1, 2]
         """
         self.matrice[x, y] = valeur  
-        
+    
+    def updateGrille(self, snakeList, foodPosition):
+        """Mets à jour la grille en replassant le Snake, ça tête et la pomme
+
+        Args:
+            snakeList ([[int, int]]): position de toutes les cases occupées par le serpent
+            foodPosition ([int, int]): position occupé par la pomme
+        """
+        self.matrice.fill(0)
+        for segment in snakeList[:-1]:
+            self.changerValeurCase(segment[0], segment[1], 1)
+        head = snakeList[-1]
+        self.changerValeurCase(head[0], head[1], 2)
+        self.changerValeurCase(foodPosition[0], foodPosition[1], -1)
