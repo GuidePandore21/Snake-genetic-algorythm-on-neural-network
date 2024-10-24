@@ -7,7 +7,7 @@ class Grille:
             height (int): hauteur de la fenêtre pygame en px (multiple de 10)
             width (int): largeur de la fenêtre pygame en px (multiple de 10)
         """
-        matrice = np.zeros((width // 10, height // 10), dtype=int) 
+        self.matrice = np.zeros((width // 10, height // 10), dtype=int) 
         
     def changerValeurCase(self, x, y, valeur):
         """Change remplace la valeur de la case à la position x, y de la matrice par la valeur en paramètre
