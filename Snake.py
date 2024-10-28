@@ -61,7 +61,7 @@ def gameLoop():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     gameClose = True
-                    INDIVIDU.fitness = -100
+                    INDIVIDU.fitness = PENALITE_ERREUR
 
         deplacement = INDIVIDU.outputNetwork()
 
@@ -79,7 +79,7 @@ def gameLoop():
             GRILLE.updateGrille(snakeList, foodPosition)
             # Vérification de la collision avec le corps du serpent
             if [headX, headY] in snakeList:
-                INDIVIDU.fitness -= -100
+                INDIVIDU.fitness -= PENALITE_COLLISION
                 gameClose = True
 
             # Mettre à jour la position du serpent
@@ -93,7 +93,7 @@ def gameLoop():
             # Gestion de la collision avec la pomme
             if [headX, headY] == foodPosition:
                 lenSnake += 1
-                INDIVIDU.fitness += 100
+                INDIVIDU.fitness += BONUS_POMME
                 foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
 
             DIS.fill(BLACK)
@@ -102,9 +102,9 @@ def gameLoop():
             pygame.display.update()
 
             CLOCK.tick(SNAKE_SPEED)
-            INDIVIDU.fitness += 1  # Augmenter la fitness par la survie
+            INDIVIDU.fitness += BONUS_SURVIE
         else:
-            INDIVIDU.fitness -= 100  # Penalité pour sortie de l'écran
+            INDIVIDU.fitness -= PENALITE_SORTIE  # Penalité pour sortie de l'écran
             gameClose = True
 
 # ------------------- SNAKE ------------------- #

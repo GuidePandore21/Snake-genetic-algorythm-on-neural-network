@@ -13,3 +13,14 @@ CLOCK = pygame.time.Clock()
 
 SNAKE_BLOCK = 10
 SNAKE_SPEED = 10
+
+# -------------------- Bonus -------------------- #
+
+BONUS_POMME = 100
+BONUS_SURVIE = 1
+
+# -------------------- Penalités -------------------- #
+
+PENALITE_ERREUR = -100
+PENALITE_COLLISION = -100
+PENALITE_SORTIE = -100
