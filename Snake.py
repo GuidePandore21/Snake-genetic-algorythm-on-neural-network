@@ -1,6 +1,7 @@
 import pygame
 import random
 import copy
+from configSnake import *
 from AlgorithmeGenetique import *
 from snakeFonctions import *
 from Grille import Grille
