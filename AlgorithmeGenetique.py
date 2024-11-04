@@ -713,8 +713,8 @@ def reproductionMeilleur(population):
     liste = triRapide(population)
     
     newGen = []
-    for i in range(len(liste), len(liste) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
-        children = croisement(liste[i], liste[- i - 1])
+    for i in range(len(liste) - 1, len(liste) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
+        children = croisement(liste[i], liste[i + 1])
         newGen.append(children[0])
         newGen.append(children[1])
     
@@ -782,7 +782,7 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
         [Network]: Nouvelle génération
     """
     newGen = []
-    newGen += selectionParRang(populationPrecedente)
+    # newGen += selectionParRang(populationPrecedente)
     newGen += selectionParAdaptation(populationPrecedente)
     newGen += selectionUniforme(populationPrecedente)
     newGen += reproductionMeilleur(populationPrecedente)
