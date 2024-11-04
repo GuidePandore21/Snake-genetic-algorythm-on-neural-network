@@ -119,7 +119,6 @@ def gameLoop():
             gameClose = True
 
 # ------------------- SNAKE ------------------- #
-
 while COMPTEUR_GENERATION <= NB_GENERATION:
     while COMPTEUR_INDIVIDU <= NB_INDIVIDU:
         gameLoop()
