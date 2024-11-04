@@ -713,7 +713,7 @@ def reproductionMeilleur(population):
     liste = triRapide(population)
     
     newGen = []
-    for i in range(len(liste) - 1, len(liste) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
+    for i in range(len(liste) - 2, len(liste) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
         children = croisement(liste[i], liste[i + 1])
         newGen.append(children[0])
         newGen.append(children[1])
