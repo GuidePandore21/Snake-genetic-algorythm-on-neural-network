@@ -642,11 +642,11 @@ def selectionParRang(population):
     elite = []
     listeTriee = triRapide(population)
     for i in range(1, int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)):
-        # if listeTriee[-i].fitness >= 100:
-        #     for j in range(5-i):
-        #         elite.append(listeTriee[-i])
-        #     elite.append(listeTriee[-i])
-        # else:
+        if listeTriee[-i].fitness >= 100:
+            for j in range(5-i):
+                elite.append(listeTriee[-i])
+            elite.append(listeTriee[-i])
+        else:
             elite.append(listeTriee[-i])
     return elite
 
@@ -689,6 +689,32 @@ def selectionUniforme(population):
     newGen = []
     for i in range(0, len(selectionnes) - 1, 2):
         children = croisement(selectionnes[i], selectionnes[i + 1])
+        newGen.append(children[0])
+        newGen.append(children[1])
+    
+    random.shuffle(newGen)
+    for i in range(len(newGen)):
+        chanceMutation = random.randint(0, 100)
+        if chanceMutation < 100 * MUTATION:
+            randomMutation = random.randint(0, len(mutations) - 1)
+            mutations[randomMutation](newGen[i])
+    
+    return newGen
+
+def reproductionMeilleur(population):
+    """Reproduction des individu ayant un fitness élevé
+
+    Args:
+        population (Network): génération précédente
+
+    Returns:
+        [Network] : liste d'individu pour la prochaine génération
+    """
+    liste = triRapide(population)
+    
+    newGen = []
+    for i in range(len(liste), len(liste) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
+        children = croisement(liste[i], liste[- i - 1])
         newGen.append(children[0])
         newGen.append(children[1])
     
@@ -759,6 +785,7 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     newGen += selectionParRang(populationPrecedente)
     newGen += selectionParAdaptation(populationPrecedente)
     newGen += selectionUniforme(populationPrecedente)
+    newGen += reproductionMeilleur(populationPrecedente)
     newGen += reproductionMeilleurMoinsBon(populationPrecedente)
     
     while len(newGen) != NB_INDIVIDU:
