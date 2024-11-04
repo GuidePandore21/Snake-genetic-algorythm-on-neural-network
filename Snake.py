@@ -1,4 +1,5 @@
 import random
+import numpy as np
 import copy
 from configSnake import *
 from AlgorithmeGenetique import *
@@ -28,12 +29,17 @@ def drawSnake(snakeList):
         color = GREEN if i < len(snakeList) - 1 else WHITE  # Tête en blanc, corps en vert
         pygame.draw.rect(DIS, color, [segment[0] * SNAKE_BLOCK, segment[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])
 
-def generateFoodPosition(snakeList):
+def generateFoodPosition():
     """Génère une position aléatoire pour la pomme qui n'est pas sur le corps du serpent."""
-    foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
-    while foodPosition not in snakeList:
-        foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
-    return foodPosition
+    zeroPositions = np.argwhere(GRILLE.matrice == 0)
+    print(zeroPositions)
+    
+    if zeroPositions.size == 0:
+        return None
+
+    random_index = np.random.choice(len(zeroPositions))
+    
+    return tuple(zeroPositions[random_index])
 
 def gameLoop():
     global BEST_INDIVIDU, SNAKE_SPEED
@@ -46,7 +52,8 @@ def gameLoop():
     lenSnake = 1
 
     # Positionnement initial de la pomme
-    foodPosition = generateFoodPosition(snakeList)
+    foodPosition = generateFoodPosition()
+    print(foodPosition)
 
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
