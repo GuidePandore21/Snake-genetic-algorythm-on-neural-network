@@ -12,7 +12,7 @@ DIS = pygame.display.set_mode((DIS_WIDTH, DIS_HEIGHT))
 CLOCK = pygame.time.Clock()
 
 SNAKE_BLOCK = 10
-SNAKE_SPEED = 10
+SNAKE_SPEED = 0
 
 # -------------------- Bonus -------------------- #
 
@@ -23,4 +23,4 @@ BONUS_SURVIE = 1
 
 PENALITE_ERREUR = -100
 PENALITE_COLLISION = -100
-PENALITE_SORTIE = -100
+PENALITE_SORTIE = 0

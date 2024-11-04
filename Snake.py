@@ -52,7 +52,6 @@ def gameLoop():
 
     # Positionnement initial de la pomme
     foodPosition = generateFoodPosition()
-    print("POMME :", foodPosition)
 
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
@@ -87,8 +86,6 @@ def gameLoop():
             headY -= 1
         elif deplacement == "DOWN":
             headY += 1
-
-        print("Snake : ", (headX, headY), "Food : ", foodPosition)
         
         if 0 <= headX < DIS_WIDTH // SNAKE_BLOCK and 0 <= headY < DIS_HEIGHT // SNAKE_BLOCK:
             # Vérification de la collision avec le corps du serpent
