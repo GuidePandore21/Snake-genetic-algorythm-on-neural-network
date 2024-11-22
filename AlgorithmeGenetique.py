@@ -710,7 +710,7 @@ def reproductionMeilleur(population):
     Returns:
         [Network] : liste d'individu pour la prochaine génération
     """
-    liste = triRapide(population)
+    liste = triRapide(population)  
     
     newGen = []
     for i in range(len(liste) - 2, len(liste) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
