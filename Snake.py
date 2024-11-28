@@ -99,19 +99,23 @@ def gameLoop():
             headY += 1
 
         if 0 <= headX < DIS_WIDTH // SNAKE_BLOCK and 0 <= headY < DIS_HEIGHT // SNAKE_BLOCK:
+            # Vérification de la collision avec le corps du serpent
             if [headX, headY] in snakeList:
                 INDIVIDU.fitness += PENALITE_COLLISION
                 gameClose = True
 
+            # Mettre à jour la position du serpent
             snakeList.append([headX, headY])
             if len(snakeList) > lenSnake:
                 del snakeList[0]
 
+            # Gestion de la collision avec la pomme
             if (headX, headY) == foodPosition:
                 lenSnake += 1
                 INDIVIDU.fitness += BONUS_POMME
                 foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
 
+            # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
 
             DIS.fill(BLACK)
@@ -122,7 +126,7 @@ def gameLoop():
             CLOCK.tick(SNAKE_SPEED)
             INDIVIDU.fitness += BONUS_SURVIE
         else:
-            INDIVIDU.fitness += PENALITE_SORTIE
+            INDIVIDU.fitness += PENALITE_SORTIE # Penalité pour sortie de l'écran
             gameClose = True
 
 # ------------------- Save Data ------------------- #
