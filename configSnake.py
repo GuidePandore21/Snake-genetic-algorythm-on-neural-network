@@ -12,7 +12,7 @@ DIS = pygame.display.set_mode((DIS_WIDTH, DIS_HEIGHT))
 CLOCK = pygame.time.Clock()
 
 SNAKE_BLOCK = 10
-SNAKE_SPEED = 0
+SNAKE_SPEED = 1000
 
 # -------------------- Bonus -------------------- #
 

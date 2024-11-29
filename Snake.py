@@ -1,6 +1,9 @@
 import random
 import numpy as np
 import copy
+
+import pandas as pd
+
 from configSnake import *
 from AlgorithmeGenetique import *
 from snakeFonctions import *
@@ -40,8 +43,12 @@ def generateFoodPosition():
     
     return tuple(zeroPositions[random_index])
 
+
+all_counts = []
+all_fitnesses = []
+all_generation = []
 def gameLoop():
-    global BEST_INDIVIDU, SNAKE_SPEED
+    global BEST_INDIVIDU, SNAKE_SPEED, all_counts, all_fitnesses, all_generation
 
     gameOver = False
     gameClose = False
@@ -62,6 +69,10 @@ def gameLoop():
     while not gameOver:
         while gameClose:
             print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
+            all_counts.append(COMPTEUR_INDIVIDU)
+            all_fitnesses.append(INDIVIDU.fitness - 1)
+            all_generation.append(COMPTEUR_GENERATION)
+
             if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
                 BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
             gameOver = True
@@ -86,7 +97,7 @@ def gameLoop():
             headY -= 1
         elif deplacement == "DOWN":
             headY += 1
-        
+
         if 0 <= headX < DIS_WIDTH // SNAKE_BLOCK and 0 <= headY < DIS_HEIGHT // SNAKE_BLOCK:
             # Vérification de la collision avec le corps du serpent
             if [headX, headY] in snakeList:
@@ -103,7 +114,7 @@ def gameLoop():
                 lenSnake += 1
                 INDIVIDU.fitness += BONUS_POMME
                 foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
-            
+
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
 
@@ -115,17 +126,39 @@ def gameLoop():
             CLOCK.tick(SNAKE_SPEED)
             INDIVIDU.fitness += BONUS_SURVIE
         else:
-            INDIVIDU.fitness += PENALITE_SORTIE  # Penalité pour sortie de l'écran
+            INDIVIDU.fitness += PENALITE_SORTIE # Penalité pour sortie de l'écran
             gameClose = True
+
+# ------------------- Save Data ------------------- #
+def saveData(COMPTEUR_GENERATION):
+    global all_counts, all_fitnesses, all_generation
+    final_data = pd.DataFrame({
+        "Generation" : all_generation,
+        "Individu": all_counts,
+        "Score": all_fitnesses,
+    })
+
+    final_data.to_csv(f"Save_Data/Generation_{COMPTEUR_GENERATION}.csv", index=False)
+    print(f"----------------- Data pour Generation {COMPTEUR_GENERATION}-------------------------------")
 
 # ------------------- SNAKE ------------------- #
 while COMPTEUR_GENERATION <= NB_GENERATION:
+    print("GENERATION :", COMPTEUR_GENERATION)
+
     while COMPTEUR_INDIVIDU <= NB_INDIVIDU:
         gameLoop()
         COMPTEUR_INDIVIDU += 1
+
+    print(saveData(COMPTEUR_GENERATION))
+
+    all_counts = []
+    all_fitnesses = []
+    all_generation = []
+
     POPULATION = nouvelleGeneration(POPULATION, INPUTS, OUTPUTS)
     COMPTEUR_INDIVIDU = 1
     COMPTEUR_GENERATION += 1
+
 
 pygame.quit()
 quit()
