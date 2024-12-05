@@ -19,6 +19,8 @@ POPULATION = initGeneration(INPUTS, OUTPUTS)
 BEST_INDIVIDU = Network([])
 BEST_INDIVIDU.fitness = 0
 
+CHECKLOOP = 0
+
 # ------------------- PYGAME ------------------- #
 
 pygame.init()
@@ -47,6 +49,7 @@ def generateFoodPosition():
 all_counts = []
 all_fitnesses = []
 all_generation = []
+
 def gameLoop():
     global BEST_INDIVIDU, SNAKE_SPEED, all_counts, all_fitnesses, all_generation
 
@@ -113,12 +116,19 @@ def gameLoop():
             if (headX, headY) == foodPosition:
                 lenSnake += 1
                 INDIVIDU.fitness += BONUS_POMME
+                CHECKLOOP = 0
                 foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
 
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
             INPUTS = GRILLE.matrice.flatten().tolist()
             INDIVIDU.miseAJourInputValue(INPUTS)
+            
+            CHECKLOOP += 1
+            
+            if CHECKLOOP > DIS_WIDTH * DIS_HEIGHT:
+                INDIVIDU.fitness = PENALITE_ERREUR
+                gameClose = True
 
             DIS.fill(BLACK)
             pygame.draw.rect(DIS, RED, [foodPosition[0] * SNAKE_BLOCK, foodPosition[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])
