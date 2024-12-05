@@ -106,6 +106,8 @@ def gameLoop():
             
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
+            INPUTS = GRILLE.matrice.flatten().tolist()
+            INDIVIDU.miseAJourInputValue(INPUTS)
 
             DIS.fill(BLACK)
             pygame.draw.rect(DIS, RED, [foodPosition[0] * SNAKE_BLOCK, foodPosition[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])

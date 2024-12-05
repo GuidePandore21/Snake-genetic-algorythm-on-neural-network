@@ -788,7 +788,7 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
         [Network]: Nouvelle génération
     """
     newGen = []
-    # newGen += selectionParRang(populationPrecedente)
+    newGen += selectionParRang(populationPrecedente)
     newGen += selectionParAdaptation(populationPrecedente)
     newGen += selectionUniforme(populationPrecedente)
     newGen += reproductionMeilleur(populationPrecedente)
