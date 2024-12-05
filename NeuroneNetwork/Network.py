@@ -113,3 +113,12 @@ class Network:
         nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
         plt.title("Réseau de Neurones")
         plt.show()
+        
+    def miseAJourInputValue(self, INPUTS):
+        """Mise à jour des valeurs des InputNeurones
+
+        Args:
+            INPUTS (list): liste des valeurs à mettre à jour
+        """
+        for i in range(len(INPUTS)):
+            self.layers[0].neurones[i].inputData = INPUTS[i]
