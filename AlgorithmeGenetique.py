@@ -324,8 +324,14 @@ def croisement(individu1, individu2):
     layersChild1 = []
     layersChild2 = []
     
-    randomSeparationIndividu1 = random.randint(1, len(individu1.layers) - 2)
-    randomSeparationIndividu2 = random.randint(1, len(individu2.layers) - 2)
+    try:
+        randomSeparationIndividu1 = random.randint(1, len(individu1.layers) - 2)
+    except Exception as e:
+        randomSeparationIndividu1 = 1
+    try:
+        randomSeparationIndividu2 = random.randint(1, len(individu2.layers) - 2)
+    except Exception as e:
+        randomSeparationIndividu2 = 1
     
     for i in range(0, randomSeparationIndividu1):
         layersChild1.append(individu1.layers[i])
