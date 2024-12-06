@@ -20,6 +20,7 @@ BEST_INDIVIDU = Network([])
 BEST_INDIVIDU.fitness = 0
 
 CHECKLOOP = 0
+CHECKLOOPPOSITION = []
 
 # ------------------- PYGAME ------------------- #
 
@@ -51,7 +52,7 @@ all_fitnesses = []
 all_generation = []
 
 def gameLoop():
-    global BEST_INDIVIDU, SNAKE_SPEED, all_counts, all_fitnesses, all_generation
+    global BEST_INDIVIDU, SNAKE_SPEED, CHECKLOOP, CHECKLOOPPOSITION, all_counts, all_fitnesses, all_generation
 
     gameOver = False
     gameClose = False
@@ -65,6 +66,7 @@ def gameLoop():
 
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
+    CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
 
     INDIVIDU = POPULATION[COMPTEUR_INDIVIDU - 1]
     INDIVIDU.fitness = 0
@@ -121,14 +123,20 @@ def gameLoop():
 
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
+            
+            # print(CHECKLOOPPOSITION)
+            
+            if GRILLE.matrice.flatten().tolist() in CHECKLOOPPOSITION:
+                INDIVIDU.fitness = PENALITE_ERREUR
+                CHECKLOOPPOSITION = []
+                gameClose = True
+                
+            CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
+            if len(CHECKLOOPPOSITION) > 4:
+                CHECKLOOPPOSITION.pop(0)
+                
             INPUTS = GRILLE.matrice.flatten().tolist()
             INDIVIDU.miseAJourInputValue(INPUTS)
-            
-            CHECKLOOP += 1
-            
-            if CHECKLOOP > DIS_WIDTH * DIS_HEIGHT:
-                INDIVIDU.fitness = PENALITE_ERREUR
-                gameClose = True
 
             DIS.fill(BLACK)
             pygame.draw.rect(DIS, RED, [foodPosition[0] * SNAKE_BLOCK, foodPosition[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])
