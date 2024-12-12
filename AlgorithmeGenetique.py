@@ -647,8 +647,14 @@ mutations = [
 def selectionParRang(population):
     elite = []
     listeTriee = triRapide(population)
+    
+    if len(listeTriee) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1):
+        nbIndividu = len(listeTriee)
+    else:
+        nbIndividu = int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)
+        
     if len(listeTriee) > 1:
-        for i in range(1, int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)):
+        for i in range(0, nbIndividu):
             for _ in range(5-i):
                 elite.append(listeTriee[-i - 1])
     else:
@@ -798,7 +804,7 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     """
     population = []
     for individu in populationPrecedente:
-        if individu.fitness - 1 not in [-100, 11, 13, 14, 111, 113, 114]:
+        if individu.fitness - 1 not in [-99, 11, 13, 14, 111, 113, 114]:
             population.append(individu)
     
     newGen = []
@@ -810,6 +816,11 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
         newGen += reproductionMeilleur(population)
         # newGen += selectionUniforme(population)
         newGen += reproductionMeilleurMoinsBon(population)
+    
+    print("NewGen : ", len(newGen))
+    
+    for i in range(len(newGen)):
+        newGen[i].fitness = 0
     
     while len(newGen) != NB_INDIVIDU:
         newGen.append(networkGenerator(INPUTS, OUTPUTS))

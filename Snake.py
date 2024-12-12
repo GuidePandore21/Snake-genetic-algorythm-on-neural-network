@@ -164,7 +164,7 @@ def saveData(COMPTEUR_GENERATION):
     })
 
     final_data.to_csv(f"Save_Data/Generation_{COMPTEUR_GENERATION}.csv", index=False)
-    print(f"----------------- Data pour Generation {COMPTEUR_GENERATION}-------------------------------")
+    print(f"----------------- Data pour Generation {COMPTEUR_GENERATION} -------------------------------")
 
 # ------------------- SNAKE ------------------- #
 while COMPTEUR_GENERATION <= NB_GENERATION:
