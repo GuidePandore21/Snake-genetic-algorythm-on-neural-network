@@ -50,31 +50,23 @@ def loadNetwork(cheminFichier, INPUTS, OUTPUTS):
         listeLayer.append(inputLayerGenerator(INPUTS))
         
         fitness = lignes[curseur]
-        print(fitness)
         curseur += 1
-        print(lignes[curseur])
         for _ in range(int(lignes[curseur]) - 1): # Layers
             curseur += 1
             labelLayer = lignes[curseur]
-            print(labelLayer)
             curseur += 1
             listeNeurones = []
             nbNeurone = int(lignes[curseur])
-            print(nbNeurone)
             for _ in range(nbNeurone): # Neurones
                 curseur += 1
                 labelNeurone = lignes[curseur]
-                print(labelNeurone)
                 curseur += 1
                 biasNeurone = lignes[curseur]
-                print(biasNeurone)
                 curseur += 1
                 inputs = []
-                print(lignes[curseur])
                 for i in range(int(lignes[curseur])): # Inputs
                     curseur += 1
                     input = lignes[curseur].split(" ")
-                    print(input)
                     for neurone in listeLayer[len(listeLayer) - 1].neurones:
                         if neurone.label == input[0]:
                             inputs.append([neurone, float(input[1])])

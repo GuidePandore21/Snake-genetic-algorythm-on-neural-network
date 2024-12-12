@@ -647,13 +647,14 @@ mutations = [
 def selectionParRang(population):
     elite = []
     listeTriee = triRapide(population)
-    for i in range(1, int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)):
-        if listeTriee[-i].fitness >= 100:
-            for j in range(5-i):
-                elite.append(listeTriee[-i])
-            elite.append(listeTriee[-i])
-        else:
-            elite.append(listeTriee[-i])
+    if len(listeTriee) > 1:
+        for i in range(1, int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)):
+            for _ in range(5-i):
+                elite.append(listeTriee[-i - 1])
+    else:
+        for _ in range(5):
+                elite.append(listeTriee[0])
+
     return elite
 
 def selectionParAdaptation(population):
@@ -670,7 +671,10 @@ def selectionParAdaptation(population):
         for i in range(individu.fitness):
             participants.append(individu)
     
-    return choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
+    if len(participants) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1):
+        return participants
+    else:
+        return choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
 
 def selectionUniforme(population):
     """Choisit de manière aléatoire des Network à dupliquer pour la prochaine génération
@@ -686,10 +690,15 @@ def selectionUniforme(population):
     selectionnes = []
     
     nbSelectionnes = int(NB_INDIVIDU * ELITE * ELITE_RATIO_UNIFORME / 2)
+    if nbSelectionnes < 1:
+        nbSelectionnes = 1
+    
     if nbSelectionnes % 2 == 1:
         nbSelectionnes -= 1
-        
-    for i in range(int(nbSelectionnes) - 1):
+    
+    print(int(nbSelectionnes - 1))
+    for i in range(int(nbSelectionnes - 1)):
+        print("in")
         selectionnes.append(liste[i])
     
     newGen = []
@@ -787,12 +796,20 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     Returns:
         [Network]: Nouvelle génération
     """
+    population = []
+    for individu in populationPrecedente:
+        if individu.fitness - 1 not in [-100, 11, 13, 14, 111, 113, 114]:
+            population.append(individu)
+    
     newGen = []
-    newGen += selectionParRang(populationPrecedente)
-    newGen += selectionParAdaptation(populationPrecedente)
-    newGen += selectionUniforme(populationPrecedente)
-    newGen += reproductionMeilleur(populationPrecedente)
-    newGen += reproductionMeilleurMoinsBon(populationPrecedente)
+    print("Population : ", len(population))
+    if len(population) != 0:
+        newGen += selectionParRang(population)
+    if len(population) >= 2:
+        newGen += selectionParAdaptation(population)
+        newGen += reproductionMeilleur(population)
+        # newGen += selectionUniforme(population)
+        newGen += reproductionMeilleurMoinsBon(population)
     
     while len(newGen) != NB_INDIVIDU:
         newGen.append(networkGenerator(INPUTS, OUTPUTS))
