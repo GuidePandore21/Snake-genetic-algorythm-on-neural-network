@@ -81,8 +81,8 @@ def gameLoop():
 
             if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
                 BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
-                
-            if INDIVIDU.fitness not in [11, 13, 14, 111, 113, 114]:
+            
+            if INDIVIDU.fitness - 1 not in [-100, 11, 13, 14, 111, 113, 114]:
                 saveNetwork(INDIVIDU, f"Save_Network/Generation_{COMPTEUR_GENERATION}_Individu_{COMPTEUR_INDIVIDU}_Score_{INDIVIDU.fitness}.txt")
                 
             gameOver = True
