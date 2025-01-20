@@ -205,7 +205,7 @@ def neuroneGenerator(label, layerPrecedent):
     Returns:
         Neurone: Neurone créé
     """
-    bias = round(random.uniform(-10, 10), 2)
+    bias = round(random.uniform(-1000, 1000), 2)
     inputs = []
     listeNeuronesLayerPrecedent = layerPrecedent.neurones
     for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
@@ -258,11 +258,11 @@ def outputLayerGenerator(layerPrecedent, outputs):
     neurones = []
     for i in range(len(outputs)):
         label = "OutputNeurone" + str(i + 1)
-        bias = round(random.uniform(-10, 10), 2)
+        bias = round(random.uniform(-1000, 1000), 2)
         inputs = []
         listeNeuronesLayerPrecedent = layerPrecedent.neurones
         for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(0, 10), 2)
+            weight = round(random.uniform(-10, 10), 2)
             inputs.append([neurone, weight])
         neurones.append(OutputNeurone(label, bias, inputs, outputs[i]))
     return Layer("OutputLayer", neurones)
@@ -300,7 +300,7 @@ def createLayerConnexion(layer, layerPrecedent):
     for neurone in layer.neurones:
         inputs = []
         for neuroneCible in choisirDansListeSansRemise(layerPrecedent.neurones):
-            weight = round(random.uniform(0, 10), 2)
+            weight = round(random.uniform(-10, 10), 2)
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     return layer
@@ -324,8 +324,14 @@ def croisement(individu1, individu2):
     layersChild1 = []
     layersChild2 = []
     
-    randomSeparationIndividu1 = random.randint(1, len(individu1.layers) - 2)
-    randomSeparationIndividu2 = random.randint(1, len(individu2.layers) - 2)
+    try:
+        randomSeparationIndividu1 = random.randint(1, len(individu1.layers) - 2)
+    except Exception as e:
+        randomSeparationIndividu1 = 1
+    try:
+        randomSeparationIndividu2 = random.randint(1, len(individu2.layers) - 2)
+    except Exception as e:
+        randomSeparationIndividu2 = 1
     
     for i in range(0, randomSeparationIndividu1):
         layersChild1.append(individu1.layers[i])
@@ -376,7 +382,7 @@ def mutationCreationConnexion(network):
             except Exception as e:
                 print("Impossible d'ajouter une connexion")
                 return -1
-            weight = round(random.uniform(0, 10), 2)
+            weight = round(random.uniform(-10, 10), 2)
             network.layers[layer].neurones[randomNeurone].inputs.append([listeNeuronesNonConnexes[randomNeuroneNonConnexes], weight])
 
 def mutationCreationNeurone(network):
@@ -392,7 +398,7 @@ def mutationCreationNeurone(network):
             network.layers[layer].neurones.append(neuroneGenerator(label, network.layers[layer - 1]))
             listeNeuroneAConnecter = choisirDansListeSansRemise(network.layers[layer + 1].neurones)
             for neurone in listeNeuroneAConnecter:
-                weight = round(random.uniform(0, 10), 2)
+                weight = round(random.uniform(-10, 10), 2)
                 neurone.inputs.append([network.layers[layer].neurones[len(network.layers[layer].neurones) - 1], weight])
 
 def mutationCreationLayer(network):
@@ -417,7 +423,7 @@ def mutationModificationNeuroneBias(network):
     """
     neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
     neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
-    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-10, 10), 2)
+    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-1000, 1000), 2)
 
 def mutationModificationConnexionPoids(network):
     """modifie de manière aléatoire la valeur du poids d'une connexion entre deux Neurones dans le Network
@@ -612,7 +618,7 @@ def mutationSuppressionLayer(network):
         inputs = []
         listeNeuronesLayerPrecedent = network.layers[layerToDeleteIndex - 1].neurones
         for neuroneCible in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(0, 10), 2)
+            weight = round(random.uniform(-10, 10), 2)
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     
@@ -641,13 +647,14 @@ mutations = [
 def selectionParRang(population):
     elite = []
     listeTriee = triRapide(population)
-    for i in range(1, int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)):
-        if listeTriee[-i].fitness >= 100:
-            for j in range(5-i):
-                elite.append(listeTriee[-i])
-            elite.append(listeTriee[-i])
-        else:
-            elite.append(listeTriee[-i])
+    if len(listeTriee) > 1:
+        for i in range(1, int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)):
+            for _ in range(5-i):
+                elite.append(listeTriee[-i - 1])
+    else:
+        for _ in range(5):
+                elite.append(listeTriee[0])
+
     return elite
 
 def selectionParAdaptation(population):
@@ -664,7 +671,10 @@ def selectionParAdaptation(population):
         for i in range(individu.fitness):
             participants.append(individu)
     
-    return choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
+    if len(participants) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1):
+        return participants
+    else:
+        return choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
 
 def selectionUniforme(population):
     """Choisit de manière aléatoire des Network à dupliquer pour la prochaine génération
@@ -680,10 +690,15 @@ def selectionUniforme(population):
     selectionnes = []
     
     nbSelectionnes = int(NB_INDIVIDU * ELITE * ELITE_RATIO_UNIFORME / 2)
+    if nbSelectionnes < 1:
+        nbSelectionnes = 1
+    
     if nbSelectionnes % 2 == 1:
         nbSelectionnes -= 1
-        
-    for i in range(int(nbSelectionnes) - 1):
+    
+    print(int(nbSelectionnes - 1))
+    for i in range(int(nbSelectionnes - 1)):
+        print("in")
         selectionnes.append(liste[i])
     
     newGen = []
@@ -781,12 +796,20 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     Returns:
         [Network]: Nouvelle génération
     """
+    population = []
+    for individu in populationPrecedente:
+        if individu.fitness - 1 not in [-100, 11, 13, 14, 111, 113, 114]:
+            population.append(individu)
+    
     newGen = []
-    # newGen += selectionParRang(populationPrecedente)
-    newGen += selectionParAdaptation(populationPrecedente)
-    newGen += selectionUniforme(populationPrecedente)
-    newGen += reproductionMeilleur(populationPrecedente)
-    newGen += reproductionMeilleurMoinsBon(populationPrecedente)
+    print("Population : ", len(population))
+    if len(population) != 0:
+        newGen += selectionParRang(population)
+    if len(population) >= 2:
+        newGen += selectionParAdaptation(population)
+        newGen += reproductionMeilleur(population)
+        # newGen += selectionUniforme(population)
+        newGen += reproductionMeilleurMoinsBon(population)
     
     while len(newGen) != NB_INDIVIDU:
         newGen.append(networkGenerator(INPUTS, OUTPUTS))

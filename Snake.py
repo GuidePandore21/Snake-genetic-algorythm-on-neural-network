@@ -8,6 +8,7 @@ from configSnake import *
 from AlgorithmeGenetique import *
 from snakeFonctions import *
 from Grille import Grille
+from SaveAndLoadSnake import *
 
 # -------------------- VARIABLES GLOBALES SNAKE -------------------- #
 
@@ -18,6 +19,9 @@ OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 POPULATION = initGeneration(INPUTS, OUTPUTS)
 BEST_INDIVIDU = Network([])
 BEST_INDIVIDU.fitness = 0
+
+CHECKLOOP = 0
+CHECKLOOPPOSITION = []
 
 # ------------------- PYGAME ------------------- #
 
@@ -47,8 +51,9 @@ def generateFoodPosition():
 all_counts = []
 all_fitnesses = []
 all_generation = []
+
 def gameLoop():
-    global BEST_INDIVIDU, SNAKE_SPEED, all_counts, all_fitnesses, all_generation
+    global BEST_INDIVIDU, SNAKE_SPEED, CHECKLOOP, CHECKLOOPPOSITION, all_counts, all_fitnesses, all_generation
 
     gameOver = False
     gameClose = False
@@ -62,6 +67,7 @@ def gameLoop():
 
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
+    CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
 
     INDIVIDU = POPULATION[COMPTEUR_INDIVIDU - 1]
     INDIVIDU.fitness = 0
@@ -75,6 +81,10 @@ def gameLoop():
 
             if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
                 BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
+            
+            if INDIVIDU.fitness - 1 not in [-100, 11, 13, 14, 111, 113, 114]:
+                saveNetwork(INDIVIDU, f"Save_Network/Generation_{COMPTEUR_GENERATION}_Individu_{COMPTEUR_INDIVIDU}_Score_{INDIVIDU.fitness}.txt")
+                
             gameOver = True
             gameClose = False
 
@@ -113,10 +123,25 @@ def gameLoop():
             if (headX, headY) == foodPosition:
                 lenSnake += 1
                 INDIVIDU.fitness += BONUS_POMME
+                CHECKLOOP = 0
                 foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
 
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
+            
+            # print(CHECKLOOPPOSITION)
+            
+            if GRILLE.matrice.flatten().tolist() in CHECKLOOPPOSITION:
+                INDIVIDU.fitness = PENALITE_ERREUR
+                CHECKLOOPPOSITION = []
+                gameClose = True
+                
+            CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
+            if len(CHECKLOOPPOSITION) > 4:
+                CHECKLOOPPOSITION.pop(0)
+                
+            INPUTS = GRILLE.matrice.flatten().tolist()
+            INDIVIDU.miseAJourInputValue(INPUTS)
 
             DIS.fill(BLACK)
             pygame.draw.rect(DIS, RED, [foodPosition[0] * SNAKE_BLOCK, foodPosition[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])
