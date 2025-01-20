@@ -163,6 +163,7 @@ cython_debug/
 
 # test
 /test
-/Save
 /Save_Data
 /Save_Network
+/Analyse_data/merged_scores.csv
+
