@@ -3,7 +3,22 @@ from NeuroneNetwork.Layer import Layer
 from NeuroneNetwork.Neurone import Neurone
 from NeuroneNetwork.InputNeurone import InputNeurone
 from NeuroneNetwork.OutputNeurone import OutputNeurone
-from AlgorithmeGenetique import inputLayerGenerator
+# from AlgorithmeGenetique import inputLayerGenerator
+
+def inputLayerGenerator(inputs):
+    """Génère un input layer et le retourne
+
+    Args:
+        inputs (float): valeur d'input du Network
+
+    Returns:
+        Layer: inputLayer du Network
+    """
+    neurones = []
+    for i in range(len(inputs)):
+        label = "InputNeurone" + str(i + 1)
+        neurones.append(InputNeurone(label, inputs[i]))
+    return Layer("InputLayer", neurones)
 
 def saveNetwork(Network, cheminFichier):
     """Sauvegarde dans un fichier txt un Network
@@ -46,12 +61,18 @@ def loadNetwork(cheminFichier, INPUTS, OUTPUTS):
         for ligne in tempLignes:
             lignes.append(ligne.replace("\n", ""))
             
+        neurones = []
+        for i in range(len(INPUTS)):
+            label = "InputNeurone" + str(i + 1)
+            neurones.append(InputNeurone(label, INPUTS[i]))
+            
         listeLayer = []
-        listeLayer.append(inputLayerGenerator(INPUTS))
+        listeLayer.append(Layer("InputLayer", neurones))
         
         fitness = lignes[curseur]
         curseur += 1
-        for _ in range(int(lignes[curseur]) - 1): # Layers
+        nbLayer = int(lignes[curseur])
+        for l in range(nbLayer - 1): # Layers
             curseur += 1
             labelLayer = lignes[curseur]
             curseur += 1
@@ -61,7 +82,7 @@ def loadNetwork(cheminFichier, INPUTS, OUTPUTS):
                 curseur += 1
                 labelNeurone = lignes[curseur]
                 curseur += 1
-                biasNeurone = lignes[curseur]
+                biasNeurone = float(lignes[curseur])
                 curseur += 1
                 inputs = []
                 for i in range(int(lignes[curseur])): # Inputs
@@ -71,7 +92,7 @@ def loadNetwork(cheminFichier, INPUTS, OUTPUTS):
                         if neurone.label == input[0]:
                             inputs.append([neurone, float(input[1])])
                             break
-                if i == nbNeurone - 1:
+                if l == nbLayer - 2:
                     neurone = OutputNeurone(labelNeurone, biasNeurone, inputs, OUTPUTS)
                 else:
                     neurone = Neurone(labelNeurone, biasNeurone, inputs)

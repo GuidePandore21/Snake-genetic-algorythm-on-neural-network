@@ -17,6 +17,8 @@ INPUTS = GRILLE.matrice.flatten().tolist()
 OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 
 POPULATION = initGeneration(INPUTS, OUTPUTS)
+# POPULATION = [loadNetwork("oldGen/0.txt", INPUTS, OUTPUTS) for i in range(NB_INDIVIDU)]
+    
 BEST_INDIVIDU = Network([])
 BEST_INDIVIDU.fitness = 0
 
@@ -71,6 +73,9 @@ def gameLoop():
 
     INDIVIDU = POPULATION[COMPTEUR_INDIVIDU - 1]
     INDIVIDU.fitness = 0
+    
+    INPUTS = GRILLE.matrice.flatten().tolist()
+    INDIVIDU.miseAJourInputValue(INPUTS)
 
     while not gameOver:
         while gameClose:
@@ -164,7 +169,7 @@ def saveData(COMPTEUR_GENERATION):
     })
 
     final_data.to_csv(f"Save_Data/Generation_{COMPTEUR_GENERATION}.csv", index=False)
-    print(f"----------------- Data pour Generation {COMPTEUR_GENERATION}-------------------------------")
+    print(f"----------------- Data pour Generation {COMPTEUR_GENERATION} -------------------------------")
 
 # ------------------- SNAKE ------------------- #
 while COMPTEUR_GENERATION <= NB_GENERATION:
