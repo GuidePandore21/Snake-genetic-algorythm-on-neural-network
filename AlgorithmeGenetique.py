@@ -6,6 +6,7 @@ from NeuroneNetwork.Layer import Layer
 from NeuroneNetwork.Neurone import Neurone
 from NeuroneNetwork.InputNeurone import InputNeurone
 from NeuroneNetwork.OutputNeurone import OutputNeurone
+from SaveAndLoadSnake import *
 
 # -------------------- OUTILS -------------------- #
 
@@ -646,20 +647,19 @@ mutations = [
 
 def selectionParRang(population):
     elite = []
-    listeTriee = triRapide(population)
     
-    if len(listeTriee) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1):
-        nbIndividu = len(listeTriee)
+    if len(population) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1):
+        nbIndividu = len(population)
     else:
         nbIndividu = int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)
         
-    if len(listeTriee) > 1:
+    if len(population) > 1:
         for i in range(0, nbIndividu):
-            for _ in range(5-i):
-                elite.append(listeTriee[-i - 1])
+            for j in range(5-i):
+                elite.append(i)
     else:
         for _ in range(5):
-                elite.append(listeTriee[0])
+            elite.append(0)
 
     return elite
 
@@ -676,11 +676,15 @@ def selectionParAdaptation(population):
     for individu in population:
         for i in range(individu.fitness):
             participants.append(individu)
-    
     if len(participants) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1):
+        for i in range(len(participants)):
+            saveNetwork(participants[i], "oldGen/Adaptation" + str(i) + ".txt")
         return participants
     else:
-        return choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
+        participants = choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
+        for i in range(len(participants)):
+            saveNetwork(participants[i], "oldGen/Adaptation" + str(i) + ".txt")
+            return participants
 
 def selectionUniforme(population):
     """Choisit de manière aléatoire des Network à dupliquer pour la prochaine génération
@@ -731,11 +735,9 @@ def reproductionMeilleur(population):
     Returns:
         [Network] : liste d'individu pour la prochaine génération
     """
-    liste = triRapide(population)  
-    
     newGen = []
-    for i in range(len(liste) - 2, len(liste) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
-        children = croisement(liste[i], liste[i + 1])
+    for i in range(len(population) - 2, len(population) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
+        children = croisement(population[i], population[i + 1])
         newGen.append(children[0])
         newGen.append(children[1])
     
@@ -745,6 +747,9 @@ def reproductionMeilleur(population):
         if chanceMutation < 100 * MUTATION:
             randomMutation = random.randint(0, len(mutations) - 1)
             mutations[randomMutation](newGen[i])
+            
+    for i in range(len(newGen)):
+        saveNetwork(newGen[i], "newGen/ReproductionMeilleur" + str(i) + ".txt")
     
     return newGen
 
@@ -757,11 +762,10 @@ def reproductionMeilleurMoinsBon(population):
     Returns:
         [Network] : liste d'individu pour la prochaine génération
     """
-    liste = triRapide(population)
     
     newGen = []
     for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2)):
-        children = croisement(liste[i], liste[- i - 1])
+        children = croisement(population[i], population[- i - 1])
         newGen.append(children[0])
         newGen.append(children[1])
     
@@ -771,6 +775,9 @@ def reproductionMeilleurMoinsBon(population):
         if chanceMutation < 100 * MUTATION:
             randomMutation = random.randint(0, len(mutations) - 1)
             mutations[randomMutation](newGen[i])
+            
+    for i in range(len(newGen)):
+        saveNetwork(newGen[i], "newGen/ReproductionMeilleur" + str(i) + ".txt")
     
     return newGen
 
@@ -803,19 +810,59 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
         [Network]: Nouvelle génération
     """
     population = []
-    for individu in populationPrecedente:
-        if individu.fitness - 1 not in [-99, 11, 13, 14, 111, 113, 114]:
-            population.append(individu)
+    compteur = 0
+    for i in range(len(populationPrecedente)):
+        if populationPrecedente[i].fitness - 1 not in [-101, -100, -99, 11, 13, 14, 111, 113, 114]:
+            population.append(populationPrecedente[i])
+            saveNetwork(populationPrecedente[i], "oldGen/" + str(compteur) + ".txt")
+            compteur += 1
+    
+    # population = triRapide(population)
     
     newGen = []
     print("Population : ", len(population))
     if len(population) != 0:
-        newGen += selectionParRang(population)
+        rang = selectionParRang(population)
+        
+        # test
+        print("Avant")
+        individuTest = population[0]
+        individuTest.miseAJourInputValue(INPUTS)
+        print("INPUTS : ")
+        for neurone in individuTest.layers[0].neurones:
+            print(neurone.label, neurone.inputData)
+        print("OUTPUTS : ")
+        for neurone in individuTest.layers[-1].neurones:
+            print(neurone.label, neurone.forwardPropagation())
+        print()
+        
+        for i in range(len(rang)):
+            newGen.append(loadNetwork("oldGen/" + str(rang[i]) + ".txt", INPUTS, OUTPUTS))
+    
+        # test
+        print("Avant")
+        individuTest = population[0]
+        individuTest.miseAJourInputValue(INPUTS)
+        print("INPUTS : ")
+        for neurone in individuTest.layers[0].neurones:
+            print(neurone.label, neurone.inputData)
+        print("OUTPUTS : ")
+        for neurone in individuTest.layers[-1].neurones:
+            print(neurone.label, neurone.forwardPropagation())
+        print()
+        print()
+        print()
+     
     if len(population) >= 2:
-        newGen += selectionParAdaptation(population)
-        newGen += reproductionMeilleur(population)
+        adaptation = selectionParAdaptation(population)
+        print("Len Adaptation : ", len(adaptation))
+        for i in range(len(adaptation) - 1):
+            newGen.append(loadNetwork("oldGen/Adaptation" + str(i) + ".txt", INPUTS, OUTPUTS))
+        reprodMeilleur = reproductionMeilleur(population)
+        for i in range(len(reprodMeilleur)):
+            newGen.append(loadNetwork("newGen/ReproductionMeilleur" + str(i) + ".txt", INPUTS, OUTPUTS))
         # newGen += selectionUniforme(population)
-        newGen += reproductionMeilleurMoinsBon(population)
+        # newGen += reproductionMeilleurMoinsBon(population)
     
     print("NewGen : ", len(newGen))
     
