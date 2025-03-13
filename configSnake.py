@@ -6,13 +6,13 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 
 DIS_WIDTH = 300
-DIS_HEIGHT = 250
+DIS_HEIGHT = 300
 
 DIS = pygame.display.set_mode((DIS_WIDTH, DIS_HEIGHT))
 CLOCK = pygame.time.Clock()
 
-SNAKE_BLOCK = 10
-SNAKE_SPEED = 100000
+SNAKE_BLOCK = 50
+SNAKE_SPEED = 1
 
 # -------------------- Bonus -------------------- #
 

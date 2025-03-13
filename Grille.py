@@ -7,7 +7,7 @@ class Grille:
             height (int): hauteur de la fenêtre pygame en px (multiple de 10)
             width (int): largeur de la fenêtre pygame en px (multiple de 10)
         """
-        self.matrice = np.zeros((width // 10, height // 10), dtype=int) 
+        self.matrice = np.zeros((width, height), dtype=int) 
         
     def changerValeurCase(self, x, y, valeur):
         """Change remplace la valeur de la case à la position x, y de la matrice par la valeur en paramètre
@@ -28,7 +28,7 @@ class Grille:
         """
         self.matrice.fill(0)
         for segment in snakeList[:-1]:
-            self.changerValeurCase(segment[0], segment[1], 1)
+            self.changerValeurCase(segment[0], segment[1], -1)
         head = snakeList[-1]
-        self.changerValeurCase(head[0], head[1], 2)
-        self.changerValeurCase(foodPosition[0], foodPosition[1], -1)
+        self.changerValeurCase(head[0], head[1], -1)
+        self.changerValeurCase(foodPosition[0], foodPosition[1], 1)

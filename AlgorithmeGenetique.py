@@ -206,11 +206,11 @@ def neuroneGenerator(label, layerPrecedent):
     Returns:
         Neurone: Neurone créé
     """
-    bias = round(random.uniform(-1000, 1000), 2)
+    bias = round(random.uniform(-100, 100), 2)
     inputs = []
     listeNeuronesLayerPrecedent = layerPrecedent.neurones
     for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-        weight = round(random.uniform(0, 10), 2)
+        weight = round(random.uniform(-10, 10), 2)
         inputs.append([neurone, weight])
     return Neurone(label, bias, inputs)
 
@@ -259,7 +259,7 @@ def outputLayerGenerator(layerPrecedent, outputs):
     neurones = []
     for i in range(len(outputs)):
         label = "OutputNeurone" + str(i + 1)
-        bias = round(random.uniform(-1000, 1000), 2)
+        bias = round(random.uniform(-100, 100), 2)
         inputs = []
         listeNeuronesLayerPrecedent = layerPrecedent.neurones
         for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
@@ -424,7 +424,7 @@ def mutationModificationNeuroneBias(network):
     """
     neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
     neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
-    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-1000, 1000), 2)
+    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-100, 100), 2)
 
 def mutationModificationConnexionPoids(network):
     """modifie de manière aléatoire la valeur du poids d'une connexion entre deux Neurones dans le Network
@@ -808,66 +808,25 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
 
     Returns:
         [Network]: Nouvelle génération
-    """
-    population = []
-    compteur = 0
-    for i in range(len(populationPrecedente)):
-        if populationPrecedente[i].fitness - 1 not in [-101, -100, -99, 11, 13, 14, 111, 113, 114]:
-            population.append(populationPrecedente[i])
-            saveNetwork(populationPrecedente[i], "oldGen/" + str(compteur) + ".txt")
-            compteur += 1
-    
+    """    
     # population = triRapide(population)
     
     newGen = []
-    print("Population : ", len(population))
-    if len(population) != 0:
-        rang = selectionParRang(population)
-        
-        # test
-        print("Avant")
-        individuTest = population[0]
-        individuTest.miseAJourInputValue(INPUTS)
-        print("INPUTS : ")
-        for neurone in individuTest.layers[0].neurones:
-            print(neurone.label, neurone.inputData)
-        print("OUTPUTS : ")
-        for neurone in individuTest.layers[-1].neurones:
-            print(neurone.label, neurone.forwardPropagation())
-        print()
-        
-        for i in range(len(rang)):
-            newGen.append(loadNetwork("oldGen/" + str(rang[i]) + ".txt", INPUTS, OUTPUTS))
+    # newGen += selectionParRang(populationPrecedente)
+    # newGen += selectionParAdaptation(populationPrecedente)
+    # newGen += selectionUniforme(populationPrecedente)
+    # newGen += reproductionMeilleur(populationPrecedente)
+    # newGen += reproductionMeilleurMoinsBon(populationPrecedente)
     
-        # test
-        print("Avant")
-        individuTest = population[0]
-        individuTest.miseAJourInputValue(INPUTS)
-        print("INPUTS : ")
-        for neurone in individuTest.layers[0].neurones:
-            print(neurone.label, neurone.inputData)
-        print("OUTPUTS : ")
-        for neurone in individuTest.layers[-1].neurones:
-            print(neurone.label, neurone.forwardPropagation())
-        print()
-        print()
-        print()
-     
-    if len(population) >= 2:
-        adaptation = selectionParAdaptation(population)
-        print("Len Adaptation : ", len(adaptation))
-        for i in range(len(adaptation) - 1):
-            newGen.append(loadNetwork("oldGen/Adaptation" + str(i) + ".txt", INPUTS, OUTPUTS))
-        reprodMeilleur = reproductionMeilleur(population)
-        for i in range(len(reprodMeilleur)):
-            newGen.append(loadNetwork("newGen/ReproductionMeilleur" + str(i) + ".txt", INPUTS, OUTPUTS))
-        # newGen += selectionUniforme(population)
-        # newGen += reproductionMeilleurMoinsBon(population)
-    
-    print("NewGen : ", len(newGen))
-    
-    for i in range(len(newGen)):
-        newGen[i].fitness = 0
+    if len(newGen) >= 2:
+        newGen += selectionParAdaptation(populationPrecedente)
+        newGen += selectionUniforme(populationPrecedente)
+        newGen += reproductionMeilleur(populationPrecedente)
+        newGen += reproductionMeilleurMoinsBon(populationPrecedente)
+    else:
+        for individu in populationPrecedente:
+            for i in range(5):
+                newGen.append(individu)
     
     while len(newGen) != NB_INDIVIDU:
         newGen.append(networkGenerator(INPUTS, OUTPUTS))
