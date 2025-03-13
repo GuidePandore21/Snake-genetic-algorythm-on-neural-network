@@ -9,10 +9,11 @@ from AlgorithmeGenetique import *
 from snakeFonctions import *
 from Grille import Grille
 from SaveAndLoadSnake import *
+import time
 
 # -------------------- VARIABLES GLOBALES SNAKE -------------------- #
 
-GRILLE = Grille(DIS_HEIGHT, DIS_WIDTH)
+GRILLE = Grille(DIS_HEIGHT // SNAKE_BLOCK, DIS_WIDTH // SNAKE_BLOCK)
 INPUTS = GRILLE.matrice.flatten().tolist()
 OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 
@@ -49,6 +50,37 @@ def generateFoodPosition():
     
     return tuple(zeroPositions[random_index])
 
+def generateFoodPositionTemplate():
+    coordinates = []
+    
+    foodPosition = [DIS_WIDTH // SNAKE_BLOCK // 2, DIS_HEIGHT // SNAKE_BLOCK // 2]
+    
+    for i in range(DIS_WIDTH // SNAKE_BLOCK // 2 - 1, -1, -1):
+        coordinates.append((i, foodPosition[1]))
+    
+    for j in range(1, DIS_HEIGHT // SNAKE_BLOCK // 2 + 1):
+        if j % 2 == 1:
+            for i in range(DIS_WIDTH // SNAKE_BLOCK - 1):
+                coordinates.append((i, foodPosition[1] - j))
+        else:
+            for i in range(DIS_WIDTH // SNAKE_BLOCK - 2, -1, -1):
+                coordinates.append((i, foodPosition[1] - j))
+    
+    for j in range(0, DIS_HEIGHT // SNAKE_BLOCK):
+        coordinates.append((DIS_WIDTH // SNAKE_BLOCK - 1, j))
+    
+    for j in range(DIS_HEIGHT // SNAKE_BLOCK - 1, DIS_HEIGHT // SNAKE_BLOCK // 2 , -1):
+        if j % 2 == 1:
+            for i in range(DIS_WIDTH // SNAKE_BLOCK - 2, -1, -1):
+                coordinates.append((i, j))
+        else:
+            for i in range(DIS_WIDTH // SNAKE_BLOCK - 1):
+                coordinates.append((i, j))
+    
+    for i in range(DIS_WIDTH // SNAKE_BLOCK - 2, DIS_WIDTH // SNAKE_BLOCK // 2 - 1, -1):
+        coordinates.append((i, foodPosition[1]))
+
+    return coordinates
 
 all_counts = []
 all_fitnesses = []
@@ -61,11 +93,15 @@ def gameLoop():
     gameClose = False
 
     # Position initiale du serpent
-    snakeList = [[DIS_WIDTH // (2 * SNAKE_BLOCK), DIS_HEIGHT // (2 * SNAKE_BLOCK)]]
+    snakeList = [[DIS_WIDTH // SNAKE_BLOCK // 2, DIS_HEIGHT // SNAKE_BLOCK // 2]]
     lenSnake = 1
 
     # Positionnement initial de la pomme
-    foodPosition = generateFoodPosition()
+    # foodPosition = generateFoodPosition()
+    
+    listeFoodPosition = generateFoodPositionTemplate()
+    compteurPomme = 0
+    foodPosition = listeFoodPosition[compteurPomme]
 
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
@@ -79,17 +115,14 @@ def gameLoop():
 
     while not gameOver:
         while gameClose:
-            print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
-            all_counts.append(COMPTEUR_INDIVIDU)
-            all_fitnesses.append(INDIVIDU.fitness - 1)
-            all_generation.append(COMPTEUR_GENERATION)
-
-            if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
-                BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
+            if INDIVIDU.fitness > 303:
+                print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
+                saveNetwork(INDIVIDU, "Snake/" + str(COMPTEUR_GENERATION) + "_" + str(COMPTEUR_INDIVIDU) + "_" + str(INDIVIDU.fitness - 1) + ".txt")
             
-            if INDIVIDU.fitness - 1 not in [-100, 11, 13, 14, 111, 113, 114]:
-                saveNetwork(INDIVIDU, f"Save_Network/Generation_{COMPTEUR_GENERATION}_Individu_{COMPTEUR_INDIVIDU}_Score_{INDIVIDU.fitness}.txt")
-                
+            # print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
+            
+            # if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
+            #     BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
             gameOver = True
             gameClose = False
 
@@ -129,7 +162,9 @@ def gameLoop():
                 lenSnake += 1
                 INDIVIDU.fitness += BONUS_POMME
                 CHECKLOOP = 0
-                foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
+                # foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
+                compteurPomme += 1
+                foodPosition = listeFoodPosition[compteurPomme]
 
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
@@ -178,6 +213,11 @@ while COMPTEUR_GENERATION <= NB_GENERATION:
     while COMPTEUR_INDIVIDU <= NB_INDIVIDU:
         gameLoop()
         COMPTEUR_INDIVIDU += 1
+    
+    populationSelectionné = []  
+    for individu in POPULATION:
+        if individu.fitness > 303:
+            populationSelectionné.append(individu)
 
     print(saveData(COMPTEUR_GENERATION))
 
@@ -185,7 +225,9 @@ while COMPTEUR_GENERATION <= NB_GENERATION:
     all_fitnesses = []
     all_generation = []
 
-    POPULATION = nouvelleGeneration(POPULATION, INPUTS, OUTPUTS)
+    POPULATION = nouvelleGeneration(populationSelectionné, INPUTS, OUTPUTS) 
+      
+    # POPULATION = nouvelleGeneration(POPULATION, INPUTS, OUTPUTS)   
     COMPTEUR_INDIVIDU = 1
     COMPTEUR_GENERATION += 1
 
