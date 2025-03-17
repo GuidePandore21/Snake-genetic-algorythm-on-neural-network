@@ -49,6 +49,7 @@ class Network:
                     neurone.forwardPropagation()
         
         indexMax = 0
+        # print(outputs)
         for i in range(1, len(outputs)):
             if outputs[indexMax] < outputs[i]:
                 indexMax = i

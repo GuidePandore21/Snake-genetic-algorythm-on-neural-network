@@ -7,6 +7,9 @@ from NeuroneNetwork.Neurone import Neurone
 from NeuroneNetwork.InputNeurone import InputNeurone
 from NeuroneNetwork.OutputNeurone import OutputNeurone
 from SaveAndLoadSnake import *
+import copy
+import gc
+import os
 
 # -------------------- OUTILS -------------------- #
 
@@ -26,6 +29,34 @@ def triRapide(liste):
         infAPivot = [objet for objet in liste[1:] if objet.fitness <= pivot]
         supAPivot = [objet for objet in liste[1:] if objet.fitness > pivot]
         return triRapide(infAPivot) + [liste[0]] + triRapide(supAPivot)
+
+def suppressionContenuDossier(dossier):
+    for fichier in os.listdir(dossier):
+        chemin = os.path.join(dossier, fichier)
+        try:
+            if os.path.isfile(chemin):
+                os.unlink(chemin)
+        except Exception as e:
+            print(e)
+
+def chargerTousLesFichiersDUnDossier(dossier):
+    listeFichier = []
+    for fichier in os.listdir(dossier):
+        listeFichier.append(loadNetwork(dossier + "/" + fichier))
+    return listeFichier
+
+def supprimerProprementNetwork(network):
+    for layer in network.layers:
+        for neuron in layer.neurones:
+            del neuron
+        del layer
+    del network
+    
+def supprimerProprementPopulation(population):
+    for individu in population:
+        supprimerProprementNetwork(individu)
+    del population
+    gc.collect()
     
 def choisirDansListeSansRemise(liste):
     """retourne au minimum un élément de la liste placé en paramètre avec un tirage sans remise
@@ -206,11 +237,11 @@ def neuroneGenerator(label, layerPrecedent):
     Returns:
         Neurone: Neurone créé
     """
-    bias = round(random.uniform(-100, 100), 2)
+    bias = round(random.uniform(-100, 100), 15)
     inputs = []
     listeNeuronesLayerPrecedent = layerPrecedent.neurones
     for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-        weight = round(random.uniform(-10, 10), 2)
+        weight = round(random.uniform(-10, 10), 15)
         inputs.append([neurone, weight])
     return Neurone(label, bias, inputs)
 
@@ -259,11 +290,11 @@ def outputLayerGenerator(layerPrecedent, outputs):
     neurones = []
     for i in range(len(outputs)):
         label = "OutputNeurone" + str(i + 1)
-        bias = round(random.uniform(-100, 100), 2)
+        bias = round(random.uniform(-100, 100), 15)
         inputs = []
         listeNeuronesLayerPrecedent = layerPrecedent.neurones
         for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(-10, 10), 2)
+            weight = round(random.uniform(-10, 10), 15)
             inputs.append([neurone, weight])
         neurones.append(OutputNeurone(label, bias, inputs, outputs[i]))
     return Layer("OutputLayer", neurones)
@@ -301,7 +332,7 @@ def createLayerConnexion(layer, layerPrecedent):
     for neurone in layer.neurones:
         inputs = []
         for neuroneCible in choisirDansListeSansRemise(layerPrecedent.neurones):
-            weight = round(random.uniform(-10, 10), 2)
+            weight = round(random.uniform(-10, 10), 15)
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     return layer
@@ -383,7 +414,7 @@ def mutationCreationConnexion(network):
             except Exception as e:
                 print("Impossible d'ajouter une connexion")
                 return -1
-            weight = round(random.uniform(-10, 10), 2)
+            weight = round(random.uniform(-10, 10), 15)
             network.layers[layer].neurones[randomNeurone].inputs.append([listeNeuronesNonConnexes[randomNeuroneNonConnexes], weight])
 
 def mutationCreationNeurone(network):
@@ -399,7 +430,7 @@ def mutationCreationNeurone(network):
             network.layers[layer].neurones.append(neuroneGenerator(label, network.layers[layer - 1]))
             listeNeuroneAConnecter = choisirDansListeSansRemise(network.layers[layer + 1].neurones)
             for neurone in listeNeuroneAConnecter:
-                weight = round(random.uniform(-10, 10), 2)
+                weight = round(random.uniform(-10, 10), 15)
                 neurone.inputs.append([network.layers[layer].neurones[len(network.layers[layer].neurones) - 1], weight])
 
 def mutationCreationLayer(network):
@@ -424,7 +455,7 @@ def mutationModificationNeuroneBias(network):
     """
     neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
     neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
-    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-100, 100), 2)
+    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-100, 100), 15)
 
 def mutationModificationConnexionPoids(network):
     """modifie de manière aléatoire la valeur du poids d'une connexion entre deux Neurones dans le Network
@@ -435,7 +466,7 @@ def mutationModificationConnexionPoids(network):
     connexionPoidsToModifyLayer = chooseRandomLayer(network)[0]
     connexionPoidsToModifyNeurone = chooseRandomNeurone(connexionPoidsToModifyLayer)[0]
     connexionPoidsToModifyConnexion = chooseRandomConnexion(connexionPoidsToModifyNeurone)
-    connexionPoidsToModifyNeurone.inputs[connexionPoidsToModifyConnexion][1] = round(random.random(), 2)
+    connexionPoidsToModifyNeurone.inputs[connexionPoidsToModifyConnexion][1] = round(random.random(), 15)
 
 # -------------------- MUTATIONS SWAP (LAYER, NEURONE, CONNEXION) -------------------- #
 
@@ -619,7 +650,7 @@ def mutationSuppressionLayer(network):
         inputs = []
         listeNeuronesLayerPrecedent = network.layers[layerToDeleteIndex - 1].neurones
         for neuroneCible in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(-10, 10), 2)
+            weight = round(random.uniform(-10, 10), 15)
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     
@@ -818,15 +849,23 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     # newGen += reproductionMeilleur(populationPrecedente)
     # newGen += reproductionMeilleurMoinsBon(populationPrecedente)
     
-    if len(newGen) >= 2:
-        newGen += selectionParAdaptation(populationPrecedente)
-        newGen += selectionUniforme(populationPrecedente)
-        newGen += reproductionMeilleur(populationPrecedente)
-        newGen += reproductionMeilleurMoinsBon(populationPrecedente)
-    else:
-        for individu in populationPrecedente:
-            for i in range(5):
-                newGen.append(individu)
+    print("len : ", len(populationPrecedente))
+    for individu in populationPrecedente:
+        newGen.append(individu)
+        # newGen.append(copy.deepcopy(individu))  # ✅ Nouvelle copie indépendante de l'individu
+
+    
+    
+    # if len(newGen) >= 2:
+    #     newGen += selectionParAdaptation(populationPrecedente)
+    #     newGen += selectionUniforme(populationPrecedente)
+    #     newGen += reproductionMeilleur(populationPrecedente)
+    #     newGen += reproductionMeilleurMoinsBon(populationPrecedente)
+    # else:
+    #     for individu in populationPrecedente:
+    #         for i in range(5):
+    #             newGen.append(copy.deepcopy(individu))  # ✅ Nouvelle copie indépendante de l'individu
+
     
     while len(newGen) != NB_INDIVIDU:
         newGen.append(networkGenerator(INPUTS, OUTPUTS))
