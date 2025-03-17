@@ -4,7 +4,6 @@ import pandas as pd
 
 from configSnake import *
 from AlgorithmeGenetique import *
-from snakeFonctions import *
 from Grille import Grille
 from SaveAndLoadSnake import *
 
