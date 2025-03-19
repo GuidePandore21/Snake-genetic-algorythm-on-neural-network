@@ -677,6 +677,7 @@ mutations = [
 # -------------------- SELECTIONS MEILLEUR INDIVIDU -------------------- #
 
 def selectionParRang(population):
+    population = list(reversed(population))
     elite = []
     
     if len(population) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1):
@@ -687,11 +688,8 @@ def selectionParRang(population):
     if len(population) > 1:
         for i in range(0, nbIndividu):
             for j in range(5-i):
-                elite.append(i)
-    else:
-        for _ in range(5):
-            elite.append(0)
-
+                elite.append(population[i])
+    
     return elite
 
 def selectionParAdaptation(population):
@@ -706,16 +704,12 @@ def selectionParAdaptation(population):
     participants = []
     for individu in population:
         for i in range(individu.fitness):
-            participants.append(individu)
+            participants.append(copy.deepcopy(individu))
     if len(participants) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1):
-        for i in range(len(participants)):
-            saveNetwork(participants[i], "oldGen/Adaptation" + str(i) + ".txt")
         return participants
     else:
         participants = choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
-        for i in range(len(participants)):
-            saveNetwork(participants[i], "oldGen/Adaptation" + str(i) + ".txt")
-            return participants
+        return participants
 
 def selectionUniforme(population):
     """Choisit de manière aléatoire des Network à dupliquer pour la prochaine génération
@@ -736,25 +730,24 @@ def selectionUniforme(population):
     
     if nbSelectionnes % 2 == 1:
         nbSelectionnes -= 1
-    
-    print(int(nbSelectionnes - 1))
+
     for i in range(int(nbSelectionnes - 1)):
-        print("in")
         selectionnes.append(liste[i])
     
     newGen = []
     for i in range(0, len(selectionnes) - 1, 2):
         children = croisement(selectionnes[i], selectionnes[i + 1])
-        newGen.append(children[0])
-        newGen.append(children[1])
+        newGen.append(copy.deepcopy(children[0]))
+        newGen.append(copy.deepcopy(children[1]))
     
     random.shuffle(newGen)
     for i in range(len(newGen)):
         chanceMutation = random.randint(0, 100)
         if chanceMutation < 100 * MUTATION:
             randomMutation = random.randint(0, len(mutations) - 1)
+            print("Mutation : ", mutations[randomMutation])
             mutations[randomMutation](newGen[i])
-    
+            
     return newGen
 
 def reproductionMeilleur(population):
@@ -766,22 +759,23 @@ def reproductionMeilleur(population):
     Returns:
         [Network] : liste d'individu pour la prochaine génération
     """
-    newGen = []
-    for i in range(len(population) - 2, len(population) - int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2), -1):
-        children = croisement(population[i], population[i + 1])
-        newGen.append(children[0])
-        newGen.append(children[1])
+
+    population = list(reversed(population))
     
+    newGen = []
+    for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_MEILLEUR / 2)):
+        children = croisement(population[i], population[-i - 1])
+        newGen.append(copy.deepcopy(children[0]))
+        newGen.append(copy.deepcopy(children[1]))
+
     random.shuffle(newGen)
     for i in range(len(newGen)):
         chanceMutation = random.randint(0, 100)
         if chanceMutation < 100 * MUTATION:
             randomMutation = random.randint(0, len(mutations) - 1)
+            print("Mutation : ", mutations[randomMutation])
             mutations[randomMutation](newGen[i])
-            
-    for i in range(len(newGen)):
-        saveNetwork(newGen[i], "newGen/ReproductionMeilleur" + str(i) + ".txt")
-    
+
     return newGen
 
 def reproductionMeilleurMoinsBon(population):
@@ -797,18 +791,16 @@ def reproductionMeilleurMoinsBon(population):
     newGen = []
     for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2)):
         children = croisement(population[i], population[- i - 1])
-        newGen.append(children[0])
-        newGen.append(children[1])
+        newGen.append(copy.deepcopy(children[0]))
+        newGen.append(copy.deepcopy(children[1]))
     
     random.shuffle(newGen)
     for i in range(len(newGen)):
         chanceMutation = random.randint(0, 100)
         if chanceMutation < 100 * MUTATION:
             randomMutation = random.randint(0, len(mutations) - 1)
+            print("Mutation : ", mutations[randomMutation])
             mutations[randomMutation](newGen[i])
-            
-    for i in range(len(newGen)):
-        saveNetwork(newGen[i], "newGen/ReproductionMeilleur" + str(i) + ".txt")
     
     return newGen
 
@@ -840,37 +832,28 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     Returns:
         [Network]: Nouvelle génération
     """    
-    # population = triRapide(population)
+    populationPrecedenteTrie = triRapide(populationPrecedente)
     
+    tempGen = []
     newGen = []
-    # newGen += selectionParRang(populationPrecedente)
-    # newGen += selectionParAdaptation(populationPrecedente)
-    # newGen += selectionUniforme(populationPrecedente)
-    # newGen += reproductionMeilleur(populationPrecedente)
-    # newGen += reproductionMeilleurMoinsBon(populationPrecedente)
+    tempGen += selectionParRang(populationPrecedenteTrie)
+    tempGen += selectionParAdaptation(populationPrecedenteTrie)
+    tempGen += selectionUniforme(populationPrecedenteTrie)
+    tempGen += reproductionMeilleur(populationPrecedenteTrie)
+    tempGen += reproductionMeilleurMoinsBon(populationPrecedenteTrie)
     
-    print("len : ", len(populationPrecedente))
-    for individu in populationPrecedente:
-        newGen.append(individu)
-        # newGen.append(copy.deepcopy(individu))  # ✅ Nouvelle copie indépendante de l'individu
-
+    for i in range(len(tempGen)):
+        saveNetwork(tempGen[i], "newGen/" + str(i + 1) + ".json")
     
-    
-    # if len(newGen) >= 2:
-    #     newGen += selectionParAdaptation(populationPrecedente)
-    #     newGen += selectionUniforme(populationPrecedente)
-    #     newGen += reproductionMeilleur(populationPrecedente)
-    #     newGen += reproductionMeilleurMoinsBon(populationPrecedente)
-    # else:
-    #     for individu in populationPrecedente:
-    #         for i in range(5):
-    #             newGen.append(copy.deepcopy(individu))  # ✅ Nouvelle copie indépendante de l'individu
-
+    newGen = chargerTousLesFichiersDUnDossier("newGen")
     
     while len(newGen) != NB_INDIVIDU:
         newGen.append(networkGenerator(INPUTS, OUTPUTS))
     
     # random.shuffle(newGen)
+    
+    suppressionContenuDossier("oldGen")
+    suppressionContenuDossier("newGen")
     
     return newGen
 

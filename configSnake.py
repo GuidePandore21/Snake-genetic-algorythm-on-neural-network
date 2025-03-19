@@ -16,7 +16,7 @@ SNAKE_SPEED = 0
 
 # -------------------- Bonus -------------------- #
 
-BONUS_POMME = 100
+BONUS_POMME = 10
 BONUS_SURVIE = 1
 
 # -------------------- Penalités -------------------- #
