@@ -385,7 +385,7 @@ def croisement(individu1, individu2):
 
     child2 = Network(layersChild2)
     child2.renameLayers()
-    for layer in child1.layers:
+    for layer in child2.layers:
         layer.renameNeurones()
     
     for i in range(1, len(child2.layers)):
