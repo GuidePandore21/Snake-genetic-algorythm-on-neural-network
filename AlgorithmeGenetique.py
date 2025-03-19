@@ -688,7 +688,7 @@ def selectionParRang(population):
     if len(population) > 1:
         for i in range(0, nbIndividu):
             for j in range(5-i):
-                elite.append(population[i])
+                elite.append(copy.deepcopy(population[i]))
     
     return elite
 
