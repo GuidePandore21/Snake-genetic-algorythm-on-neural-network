@@ -178,7 +178,7 @@ def gameLoop():
             # print(CHECKLOOPPOSITION)
             
             if GRILLE.matrice.flatten().tolist() in CHECKLOOPPOSITION:
-                INDIVIDU.fitness = PENALITE_ERREUR
+                INDIVIDU.fitness += PENALITE_ERREUR
                 CHECKLOOPPOSITION = []
                 gameClose = True
                 # print("penalité boucle infinie")
