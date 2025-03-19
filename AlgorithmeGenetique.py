@@ -778,6 +778,25 @@ def reproductionMeilleur(population):
 
     return newGen
 
+def reproductionAleatoire(population):
+    random.shuffle(population)
+    
+    newGen = []
+    for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_ALEATOIRE / 2)):
+        children = croisement(population[i], population[-i - 1])
+        newGen.append(copy.deepcopy(children[0]))
+        newGen.append(copy.deepcopy(children[1]))
+
+    random.shuffle(newGen)
+    for i in range(len(newGen)):
+        chanceMutation = random.randint(0, 100)
+        if chanceMutation < 100 * MUTATION:
+            randomMutation = random.randint(0, len(mutations) - 1)
+            print("Mutation : ", mutations[randomMutation])
+            mutations[randomMutation](newGen[i])
+
+    return newGen
+
 def reproductionMeilleurMoinsBon(population):
     """Reproduction des individu ayant un fitness moindre
 
@@ -839,8 +858,9 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     tempGen += selectionParRang(populationPrecedenteTrie)
     tempGen += selectionParAdaptation(populationPrecedenteTrie)
     tempGen += selectionUniforme(populationPrecedenteTrie)
-    tempGen += reproductionMeilleur(populationPrecedenteTrie)
-    tempGen += reproductionMeilleurMoinsBon(populationPrecedenteTrie)
+    # tempGen += reproductionMeilleur(populationPrecedenteTrie)
+    tempGen += reproductionAleatoire(populationPrecedenteTrie)
+    # tempGen += reproductionMeilleurMoinsBon(populationPrecedenteTrie)
     
     for i in range(len(tempGen)):
         saveNetwork(tempGen[i], "newGen/" + str(i + 1) + ".json")
