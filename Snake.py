@@ -113,16 +113,13 @@ def gameLoop():
 
     while not gameOver:
         
-        while gameClose:
+        while gameClose: 
             print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
-            if INDIVIDU.fitness > 400:
-                # print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
-                saveNetwork(INDIVIDU, "Save_Network/" + str(COMPTEUR_GENERATION) + "_" + str(COMPTEUR_INDIVIDU) + "_" + str(INDIVIDU.fitness - 1) + ".json")
-                    
-            # print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
+            saveNetwork(INDIVIDU, f"Save_Network/{COMPTEUR_GENERATION}" + "/" + str(COMPTEUR_INDIVIDU) + "_" + str(INDIVIDU.fitness) + ".json")
+            saveNetwork(INDIVIDU, f"oldGen/{COMPTEUR_INDIVIDU}.json")
             
-            # if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
-            #     BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
+            if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
+                BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
             CHECKLOOPPOSITION = []
             gameOver = True
             gameClose = False
@@ -159,7 +156,7 @@ def gameLoop():
             if [headX, headY] in snakeList:
                 INDIVIDU.fitness += PENALITE_COLLISION
                 gameClose = True
-                print("penalité collision avec lui même")
+                # print("penalité collision avec lui même")
 
             # Mettre à jour la position du serpent
             snakeList.append([headX, headY])
@@ -184,14 +181,11 @@ def gameLoop():
                 INDIVIDU.fitness = PENALITE_ERREUR
                 CHECKLOOPPOSITION = []
                 gameClose = True
-                print("penalité boucle infinie")
+                # print("penalité boucle infinie")
                 
             CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
             if len(CHECKLOOPPOSITION) > 4:
                 CHECKLOOPPOSITION.pop(0)
-                
-            INPUTS = GRILLE.matrice.flatten().tolist()
-            INDIVIDU.miseAJourInputValue(INPUTS)
 
             DIS.fill(BLACK)
             pygame.draw.rect(DIS, RED, [foodPosition[0] * SNAKE_BLOCK, foodPosition[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])
@@ -202,7 +196,7 @@ def gameLoop():
             INDIVIDU.fitness += BONUS_SURVIE
         else:
             INDIVIDU.fitness += PENALITE_SORTIE # Penalité pour sortie de l'écran
-            print("penalité sortie de l'écran")
+            # print("penalité sortie de l'écran")
             gameClose = True
 
 # ------------------- Save Data ------------------- #
@@ -215,30 +209,24 @@ def saveData(COMPTEUR_GENERATION):
     })
 
     final_data.to_csv(f"Save_Data/Generation_{COMPTEUR_GENERATION}.csv", index=False)
-    # print(f"----------------- Data pour Generation {COMPTEUR_GENERATION} -------------------------------")
+    print(f"----------------- Data pour Generation {COMPTEUR_GENERATION} -------------------------------")
 
 # ------------------- SNAKE ------------------- #
 while COMPTEUR_GENERATION <= NB_GENERATION:
     print("GENERATION :", COMPTEUR_GENERATION)
-
-    while COMPTEUR_INDIVIDU <= NB_INDIVIDU:
-        gameLoop()
-        COMPTEUR_INDIVIDU += 1
+    os.makedirs(f"Save_Network/{COMPTEUR_GENERATION}", exist_ok=True)
     
     folder = "oldGen"
     suppressionContenuDossier(folder)
     
-    populationSelectionne = [] 
-    compteurSelectionne = 1
-    for individu in POPULATION:
-        if individu.fitness > 400:
-            # populationSelectionne.append(copy.deepcopy(individu))
-            saveNetwork(individu, "oldGen/" + str(compteurSelectionne) + ".json")
-            compteurSelectionne += 1
-        
+    while COMPTEUR_INDIVIDU <= NB_INDIVIDU:
+        gameLoop()
+        COMPTEUR_INDIVIDU += 1
+    
+       
     populationSelectionne = chargerTousLesFichiersDUnDossier(folder)
 
-    print(saveData(COMPTEUR_GENERATION))
+    saveData(COMPTEUR_GENERATION)
 
     all_counts = []
     all_fitnesses = []
@@ -257,6 +245,8 @@ while COMPTEUR_GENERATION <= NB_GENERATION:
     # POPULATION = nouvelleGeneration(POPULATION, INPUTS, OUTPUTS)   
     COMPTEUR_INDIVIDU = 1
     COMPTEUR_GENERATION += 1
+
+saveNetwork(BEST_INDIVIDU, "Le_Soat_" + str(BEST_INDIVIDU.fitness) + ".json")
 
 
 pygame.quit()
