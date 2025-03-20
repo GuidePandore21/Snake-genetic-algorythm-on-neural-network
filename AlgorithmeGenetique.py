@@ -821,9 +821,8 @@ def reproductionAleatoire(population):
     
     newGen = []
     for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_ALEATOIRE / 2)):
-        children = croisement(population[i], population[-i - 1])
-        newGen.append(copy.deepcopy(children[0]))
-        newGen.append(copy.deepcopy(children[1]))
+        child = croisementPondere(population[i], population[-i - 1])
+        newGen.append(copy.deepcopy(child))
 
     random.shuffle(newGen)
     for i in range(len(newGen)):
@@ -847,9 +846,8 @@ def reproductionMeilleurMoinsBon(population):
     
     newGen = []
     for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_BON_PAS_BON / 2)):
-        children = croisement(population[i], population[- i - 1])
-        newGen.append(copy.deepcopy(children[0]))
-        newGen.append(copy.deepcopy(children[1]))
+        child = croisementPondere(population[i], population[- i - 1])
+        newGen.append(copy.deepcopy(child))
     
     random.shuffle(newGen)
     for i in range(len(newGen)):
@@ -897,7 +895,7 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     tempGen += selectionParAdaptation(populationPrecedenteTrie)
     # tempGen += selectionUniforme(populationPrecedenteTrie)
     tempGen += reproductionMeilleur(populationPrecedenteTrie)
-    # tempGen += reproductionAleatoire(populationPrecedenteTrie)
+    tempGen += reproductionAleatoire(populationPrecedenteTrie)
     # tempGen += reproductionMeilleurMoinsBon(populationPrecedenteTrie)
     
     for i in range(len(tempGen)):
