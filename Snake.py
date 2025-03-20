@@ -14,7 +14,7 @@ INPUTS = GRILLE.matrice.flatten().tolist()
 OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 
 POPULATION = initGeneration(INPUTS, OUTPUTS)
-# POPULATION = [copy.deepcopy(loadNetwork("newGen/1_9_403.json")) for i in range(NB_INDIVIDU)]
+# POPULATION = [copy.deepcopy(loadNetwork("1_348.48.json")) for i in range(NB_INDIVIDU)]
 
     
 BEST_INDIVIDU = Network([])
@@ -118,8 +118,10 @@ def gameLoop():
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
     CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
+    previousDistance = GRILLE.distanceManhattan(snakeList[-1], foodPosition)
 
     INDIVIDU = POPULATION[COMPTEUR_INDIVIDU - 1]
+    # INDIVIDU.fitness = 0
     INDIVIDU.fitness = fitnessPenaliteTailleSnake(INDIVIDU)
     
     INPUTS = GRILLE.matrice.flatten().tolist()
@@ -177,6 +179,8 @@ def gameLoop():
             if len(snakeList) > lenSnake:
                 del snakeList[0]
 
+            currentDistance = GRILLE.distanceManhattan([headX, headY], foodPosition)
+
             # Gestion de la collision avec la pomme
             if (headX, headY) == foodPosition:
                 lenSnake += 1
@@ -185,6 +189,12 @@ def gameLoop():
                 # foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
                 compteurPomme += 1
                 foodPosition = listeFoodPosition[compteurPomme]
+            else :
+                if currentDistance < previousDistance:
+                    INDIVIDU.fitness += BONUS_RAPPROCHEMENT_POMME
+                else:
+                    INDIVIDU.fitness += PENALITE_ELOIGNEMENT_POMME
+            previousDistance = currentDistance
 
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)

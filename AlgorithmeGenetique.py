@@ -432,8 +432,8 @@ def mutationCreationConnexion(network):
     for layer in range(len(network.layers)):
         if randomLayer == layer:
             randomNeurone = random.randint(0, len(network.layers[layer].neurones) - 1)
-            listeNeuronesNonConnexes = trouverElementsNonConnexes(network.layers[layer].neurones[randomNeurone].inputs[0], network.layers[layer - 1].neurones)
             try:
+                listeNeuronesNonConnexes = trouverElementsNonConnexes(network.layers[layer].neurones[randomNeurone].inputs[0], network.layers[layer - 1].neurones)
                 randomNeuroneNonConnexes = random.randint(0, len(listeNeuronesNonConnexes) - 1)
             except Exception as e:
                 print("Impossible d'ajouter une connexion")
@@ -641,7 +641,10 @@ def mutationSuppressionConnexion(network):
     connexionToDeleteLayer = chooseRandomLayer(network)[0]
     connexionToDeleteNeurone = chooseRandomNeurone(connexionToDeleteLayer)[0]
     connexionToDelete = chooseRandomConnexion(connexionToDeleteNeurone)
-    connexionToDeleteNeurone.inputs.pop(connexionToDelete)
+    try:
+        connexionToDeleteNeurone.inputs.pop(connexionToDelete)
+    except Exception as e:
+        print("Impossible de supprimer une connexion")
 
 def mutationSuppressionNeurone(network):
     """supprime de manière aléatoire un Neurone dans le Network
@@ -704,33 +707,37 @@ def selectionParRang(population):
     population = list(reversed(population))
     elite = []
     
-    if len(population) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1):
+    if len(population) < int(NB_INDIVIDU * ELITE_RATIO_RANG + 1):
         nbIndividu = len(population)
     else:
-        nbIndividu = int(NB_INDIVIDU * ELITE * ELITE_RATIO_RANG + 1)
+        nbIndividu = int(NB_INDIVIDU * ELITE_RATIO_RANG + 1)
         
     if len(population) > 1:
         for i in range(0, nbIndividu):
-            for j in range(5-i):
-                elite.append(copy.deepcopy(population[i]))
+            elite.append(copy.deepcopy(population[i]))
     
     return elite
 
 def selectionParAdaptation(population):
-    """Sélectionne les individus selon une Roulette Wheel Selection."""
+    """Sélectionne les individus selon une Roulette Wheel Selection, même avec des fitness négatives."""
     
-    # Étape 1 : Calculer la somme totale des fitness
-    total_fitness = sum(individu.fitness for individu in population)
-    
-    # Éviter une division par zéro si toutes les fitness sont nulles
+    min_fitness = min(individu.fitness for individu in population)
+
+    # Décaler les fitness pour qu'elles soient toutes positives
+    if min_fitness < 0:
+        decalage = abs(min_fitness) + 1  # Décalage pour rendre toutes les valeurs ≥ 1
+    else:
+        decalage = 0  # Pas besoin de décalage si toutes sont positives
+
+    fitness_ajustees = [(individu.fitness + decalage) for individu in population]
+    total_fitness = sum(fitness_ajustees)
+
     if total_fitness == 0:
         return random.sample(population, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION))
-    
-    # Étape 2 : Calculer les probabilités cumulées
-    probabilites = [individu.fitness / total_fitness for individu in population]
+
+    probabilites = [fitness / total_fitness for fitness in fitness_ajustees]
     cumulees = [sum(probabilites[:i+1]) for i in range(len(probabilites))]
-    
-    # Étape 3 : Sélectionner les individus
+
     selectionnes = []
     for _ in range(int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION)):
         r = random.random()  # Nombre aléatoire entre 0 et 1
@@ -738,8 +745,9 @@ def selectionParAdaptation(population):
             if r <= seuil:
                 selectionnes.append(copy.deepcopy(population[i]))
                 break  # Sortir dès qu'on trouve l'individu correspondant
-    
+
     return selectionnes
+
 
 
 def selectionUniforme(population):
@@ -885,8 +893,8 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     
     tempGen = []
     newGen = []
-    # tempGen += selectionParRang(populationPrecedenteTrie)
-    # tempGen += selectionParAdaptation(populationPrecedenteTrie)
+    tempGen += selectionParRang(populationPrecedenteTrie)
+    tempGen += selectionParAdaptation(populationPrecedenteTrie)
     # tempGen += selectionUniforme(populationPrecedenteTrie)
     tempGen += reproductionMeilleur(populationPrecedenteTrie)
     # tempGen += reproductionAleatoire(populationPrecedenteTrie)

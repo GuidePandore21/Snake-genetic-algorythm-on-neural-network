@@ -16,7 +16,8 @@ SNAKE_SPEED = 0
 
 # -------------------- Bonus -------------------- #
 
-BONUS_POMME = 10
+BONUS_POMME = 50
+BONUS_RAPPROCHEMENT_POMME = 5
 BONUS_SURVIE = 1
 
 # -------------------- Penalités -------------------- #
@@ -26,3 +27,4 @@ PENALITE_TAILLE = 0.01
 PENALITE_ERREUR = -10
 PENALITE_COLLISION = -10
 PENALITE_SORTIE = 0
+PENALITE_ELOIGNEMENT_POMME = -5
