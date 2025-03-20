@@ -393,6 +393,25 @@ def croisement(individu1, individu2):
     
     return child1, child2
 
+def croisementPondere(individu1, individu2):
+    """Croisement en mélangeant les poids des parents au lieu de couper les couches"""
+    
+    enfant = copy.deepcopy(individu1)
+
+    for layer1, layer2, layerEnfant in zip(individu1.layers, individu2.layers, enfant.layers):
+        for neurone1, neurone2, neurone_enfant in zip(layer1.neurones, layer2.neurones, layerEnfant.neurones):
+            alpha = random.uniform(0, 1)  # Facteur de mélange
+
+            for i in range(len(neurone_enfant.inputs)):
+                poids1 = neurone1.inputs[i][1]
+                poids2 = neurone2.inputs[i][1]
+                
+                # Nouveau poids = mix des parents
+                neurone_enfant.inputs[i][1] = alpha * poids1 + (1 - alpha) * poids2
+
+    return enfant
+
+
 # -------------------- MUTATIONS CREATION (LAYER, NEURONE, CONNEXION) -------------------- #
 
 def mutationCreationConnexion(network):
