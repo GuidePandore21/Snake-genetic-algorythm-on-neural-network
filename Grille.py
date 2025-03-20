@@ -7,7 +7,11 @@ class Grille:
             height (int): hauteur de la fenêtre pygame en px (multiple de 10)
             width (int): largeur de la fenêtre pygame en px (multiple de 10)
         """
-        self.matrice = np.zeros((width, height), dtype=int) 
+        self.matrice = np.zeros((width, height), dtype=int)
+    
+    def distanceManhattan(self, position1, position2):
+        """Calcule la distance de Manhattan entre deux points"""
+        return abs(position1[0] - position2[0]) + abs(position1[1] - position2[1])
         
     def changerValeurCase(self, x, y, valeur):
         """Change remplace la valeur de la case à la position x, y de la matrice par la valeur en paramètre

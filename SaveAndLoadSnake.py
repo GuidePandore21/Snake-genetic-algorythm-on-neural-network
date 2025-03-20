@@ -60,7 +60,7 @@ def loadNetwork(filename):
         for neurone_data, neurone in zip(layer_data["neurones"], layer.neurones):
             if "inputs" in neurone_data:
                 for inp in neurone_data["inputs"]:
-                    neurone.inputs.append((neurone_dict[inp["neurone"]], inp["weight"]))
+                    neurone.inputs.append([neurone_dict[inp["neurone"]], inp["weight"]])
 
     # Création du réseau de neurones final
     network = Network(layers)

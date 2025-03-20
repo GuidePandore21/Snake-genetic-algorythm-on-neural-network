@@ -1,5 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
+
 class Network:
     def __init__(self, layers) -> None:
         """Constructeur de la classe Network
@@ -33,28 +35,35 @@ class Network:
         self.fitness += fitness
         self.layers[0].neurones[2].inputData = foodx
         self.layers[0].neurones[3].inputData = foody
-    
+
+    def softmax(self, x):
+        """Applique la fonction Softmax à une liste de valeurs."""
+        exp_x = np.exp(x - np.max(x))
+        return exp_x / np.sum(exp_x)
+
     def outputNetwork(self):
-        """Retourne la valeur de sortie du Network
+        """Retourne la valeur de sortie du Network avec Softmax.
 
         Returns:
-            string: valeur de sortie
+            string: valeur de sortie choisie
         """
         outputs = []
+        
         for layer in self.layers:
             for neurone in layer.neurones:
                 if layer.label == "OutputLayer":
                     outputs.append(neurone.forwardPropagation())
                 else:
                     neurone.forwardPropagation()
+
+        # Appliquer Softmax sur les valeurs de sortie
+        outputs = self.softmax(outputs)
+
+        # Sélectionner l'index avec la probabilité la plus élevée
+        indexMax = np.argmax(outputs)
         
-        indexMax = 0
-        # print(outputs)
-        for i in range(1, len(outputs)):
-            if outputs[indexMax] < outputs[i]:
-                indexMax = i
-                
-        return self.layers[len(self.layers) - 1].neurones[indexMax].valeurOutput
+        return self.layers[-1].neurones[indexMax].valeurOutput
+
     
     def printOutputNetwork(self):
         """Affiche toutes les valeurs de sortie possible du Network
