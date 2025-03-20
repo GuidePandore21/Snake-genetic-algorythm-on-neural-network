@@ -33,13 +33,13 @@ class Neurone:
         self.output = self.activation(calcul)
         return self.output
     
-    def activation(self, x):
+    def activation(self, x, alpha=0.001):
         """retourne la valeur de sortie de la fonction d'activation du Neurone,  sigmoid
 
         Returns:
             float: valeur de sortie de la fonction d'activation du Neurone
         """
-        return max(0, x)
+        return x if x > 0 else alpha * x
         # return 1 / (1 + (math.exp(-x)))
         
 
