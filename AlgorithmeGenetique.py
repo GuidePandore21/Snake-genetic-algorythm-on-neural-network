@@ -399,15 +399,20 @@ def croisementPondere(individu1, individu2):
     enfant = copy.deepcopy(individu1)
 
     for layer1, layer2, layerEnfant in zip(individu1.layers, individu2.layers, enfant.layers):
-        for neurone1, neurone2, neurone_enfant in zip(layer1.neurones, layer2.neurones, layerEnfant.neurones):
+        if layer1.label == "InputLayer" or layer1.label == "OutputLayer":
+            continue
+        for neurone1, neurone2, neuroneEnfant in zip(layer1.neurones, layer2.neurones, layerEnfant.neurones):
             alpha = random.uniform(0, 1)  # Facteur de mélange
 
-            for i in range(len(neurone_enfant.inputs)):
+            # Assurer que les deux neurones ont le même nombre d'inputs
+            taille_min = min(len(neurone1.inputs), len(neurone2.inputs))
+            
+            for i in range(taille_min):
                 poids1 = neurone1.inputs[i][1]
                 poids2 = neurone2.inputs[i][1]
                 
                 # Nouveau poids = mix des parents
-                neurone_enfant.inputs[i][1] = alpha * poids1 + (1 - alpha) * poids2
+                neuroneEnfant.inputs[i][1] = alpha * poids1 + (1 - alpha) * poids2
 
     return enfant
 
@@ -681,16 +686,16 @@ def mutationSuppressionLayer(network):
 
 mutations = [
     mutationCreationConnexion,
-    mutationCreationNeurone,
-    mutationCreationLayer, 
+    # mutationCreationNeurone,
+    # mutationCreationLayer, 
     mutationModificationConnexionPoids,
     mutationModificationNeuroneBias,
-    mutationSwapConnexion,
-    mutationSwapNeurone,
-    mutationSwapLayer,
+    # mutationSwapConnexion,
+    # mutationSwapNeurone,
+    # mutationSwapLayer,
     mutationSuppressionConnexion,
-    mutationSuppressionNeurone,
-    mutationSuppressionLayer
+    # mutationSuppressionNeurone,
+    # mutationSuppressionLayer
 ]
 
 # -------------------- SELECTIONS MEILLEUR INDIVIDU -------------------- #
@@ -712,23 +717,30 @@ def selectionParRang(population):
     return elite
 
 def selectionParAdaptation(population):
-    """Choisit, dans une liste d'individu dupliqué en fonction de leurs fitness, un nombre d'individu pour la prochaine population
+    """Sélectionne les individus selon une Roulette Wheel Selection."""
+    
+    # Étape 1 : Calculer la somme totale des fitness
+    total_fitness = sum(individu.fitness for individu in population)
+    
+    # Éviter une division par zéro si toutes les fitness sont nulles
+    if total_fitness == 0:
+        return random.sample(population, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION))
+    
+    # Étape 2 : Calculer les probabilités cumulées
+    probabilites = [individu.fitness / total_fitness for individu in population]
+    cumulees = [sum(probabilites[:i+1]) for i in range(len(probabilites))]
+    
+    # Étape 3 : Sélectionner les individus
+    selectionnes = []
+    for _ in range(int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION)):
+        r = random.random()  # Nombre aléatoire entre 0 et 1
+        for i, seuil in enumerate(cumulees):
+            if r <= seuil:
+                selectionnes.append(copy.deepcopy(population[i]))
+                break  # Sortir dès qu'on trouve l'individu correspondant
+    
+    return selectionnes
 
-    Args:
-        population (Network): liste des Network
-
-    Returns:
-        [Network]: liste des Network pour la prochaine population
-    """
-    participants = []
-    for individu in population:
-        for i in range(individu.fitness):
-            participants.append(copy.deepcopy(individu))
-    if len(participants) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1):
-        return participants
-    else:
-        participants = choisirDansListeSansRemiseNombre(participants, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION - 1))
-        return participants
 
 def selectionUniforme(population):
     """Choisit de manière aléatoire des Network à dupliquer pour la prochaine génération
@@ -783,9 +795,8 @@ def reproductionMeilleur(population):
     
     newGen = []
     for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_MEILLEUR / 2)):
-        children = croisement(population[i], population[-i - 1])
-        newGen.append(copy.deepcopy(children[0]))
-        newGen.append(copy.deepcopy(children[1]))
+        child = croisementPondere(population[i], population[-i - 1])
+        newGen.append(copy.deepcopy(child))
 
     random.shuffle(newGen)
     for i in range(len(newGen)):
@@ -874,11 +885,11 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     
     tempGen = []
     newGen = []
-    tempGen += selectionParRang(populationPrecedenteTrie)
-    tempGen += selectionParAdaptation(populationPrecedenteTrie)
-    tempGen += selectionUniforme(populationPrecedenteTrie)
-    # tempGen += reproductionMeilleur(populationPrecedenteTrie)
-    tempGen += reproductionAleatoire(populationPrecedenteTrie)
+    # tempGen += selectionParRang(populationPrecedenteTrie)
+    # tempGen += selectionParAdaptation(populationPrecedenteTrie)
+    # tempGen += selectionUniforme(populationPrecedenteTrie)
+    tempGen += reproductionMeilleur(populationPrecedenteTrie)
+    # tempGen += reproductionAleatoire(populationPrecedenteTrie)
     # tempGen += reproductionMeilleurMoinsBon(populationPrecedenteTrie)
     
     for i in range(len(tempGen)):
