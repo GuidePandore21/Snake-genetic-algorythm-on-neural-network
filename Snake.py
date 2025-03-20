@@ -37,6 +37,20 @@ def drawSnake(snakeList):
         # color = GREEN if i < len(snakeList) - 1 else WHITE  # Tête en blanc, corps en vert
         pygame.draw.rect(DIS, color, [segment[0] * SNAKE_BLOCK, segment[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])
 
+def fitnessPenaliteTailleSnake(individu):
+    nbNeurones = 0
+    nbConnexions = 0
+    
+    for layer in individu.layers:
+        if layer.label != "InputLayer":
+            for neurone in layer.neurones:
+                nbNeurones += 1
+                for input in neurone.inputs:
+                    nbConnexions += 1
+    
+    return  -PENALITE_TAILLE * (nbNeurones + nbConnexions)
+    
+
 def generateFoodPosition():
     """Génère une position aléatoire pour la pomme qui n'est pas sur le corps du serpent."""
     zeroPositions = np.argwhere(GRILLE.matrice == 0)
@@ -106,7 +120,7 @@ def gameLoop():
     CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
 
     INDIVIDU = POPULATION[COMPTEUR_INDIVIDU - 1]
-    INDIVIDU.fitness = 0
+    INDIVIDU.fitness = fitnessPenaliteTailleSnake(INDIVIDU)
     
     INPUTS = GRILLE.matrice.flatten().tolist()
     INDIVIDU.miseAJourInputValue(INPUTS)

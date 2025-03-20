@@ -21,6 +21,8 @@ BONUS_SURVIE = 1
 
 # -------------------- Penalités -------------------- #
 
+PENALITE_TAILLE = 0.01
+
 PENALITE_ERREUR = -10
 PENALITE_COLLISION = -10
 PENALITE_SORTIE = 0
