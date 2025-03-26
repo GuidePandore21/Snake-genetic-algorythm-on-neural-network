@@ -498,15 +498,20 @@ def mutationModificationNeuroneBias(network):
     neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-100, 100), 15)
 
 def mutationModificationConnexionPoids(network):
-    """modifie de manière aléatoire la valeur du poids d'une connexion entre deux Neurones dans le Network
+    """Modifie le poids d'une connexion influente, sinon aléatoire"""
+    connexions_importantes = trouverConnexionsInfluentes(network)
 
-    Args:
-        network (Network): Network dans lequel la modification se fait
-    """
-    connexionPoidsToModifyLayer = chooseRandomLayer(network)[0]
-    connexionPoidsToModifyNeurone = chooseRandomNeurone(connexionPoidsToModifyLayer)[0]
-    connexionPoidsToModifyConnexion = chooseRandomConnexion(connexionPoidsToModifyNeurone)
-    connexionPoidsToModifyNeurone.inputs[connexionPoidsToModifyConnexion][1] = round(random.random(), 15)
+    if connexions_importantes:
+        neurone, connexion = random.choice(connexions_importantes)
+        nouvelle_valeur = round(random.uniform(-10, 10), 15)
+        connexion[1] = nouvelle_valeur  # modifier le poids
+    else:
+        # fallback classique
+        layer = chooseRandomLayer(network)[0]
+        neurone = chooseRandomNeurone(layer)[0]
+        index = chooseRandomConnexion(neurone)
+        neurone.inputs[index][1] = round(random.uniform(-10, 10), 15)
+
 
 # -------------------- MUTATIONS SWAP (LAYER, NEURONE, CONNEXION) -------------------- #
 
