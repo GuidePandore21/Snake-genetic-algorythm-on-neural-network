@@ -416,6 +416,22 @@ def croisementPondere(individu1, individu2):
 
     return enfant
 
+# -------------------- MUTATIONS -------------------- #
+
+def trouverConnexionsInfluentes(network, seuil=0.5):
+    """Retourne les connexions influentes (poids élevés)"""
+    connexions = []
+
+    for layer in network.layers:
+        if layer.label in ["InputLayer", "OutputLayer"]:
+            continue
+        for neurone in layer.neurones:
+            for connexion in neurone.inputs:
+                poids = connexion[1]
+                if abs(poids) > seuil:
+                    connexions.append((neurone, connexion))
+                    
+    return connexions
 
 # -------------------- MUTATIONS CREATION (LAYER, NEURONE, CONNEXION) -------------------- #
 
