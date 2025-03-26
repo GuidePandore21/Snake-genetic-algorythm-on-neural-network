@@ -496,30 +496,38 @@ def mutationCreationLayer(network):
 
 # -------------------- MUTATIONS MODIFICATION (NEURONE BIAS, CONNEXION POIDS) -------------------- #
 
-def mutationModificationNeuroneBias(network):
-    """modifie de manière aléatoire la valeur du bias d'un Neurone dans le Network
+def mutationModificationNeuroneBias(network, sigma_perturbation=5):
+    """Ajoute une perturbation gaussienne douce au biais d’un neurone, hors InputLayer"""
+    hiddenOrOutputLayers = [layer for layer in network.layers if layer.label != "InputLayer"]
+    layer = random.choice(hiddenOrOutputLayers)
+    neurone = chooseRandomNeurone(layer)[0]
 
-    Args:
-        network (Network): Network dans lequel la modification se fait
-    """
-    neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
-    neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
-    neuroneBiasToModifyNeurone[0].bias = randomBiasLoiNormale()
+    perturbation = random.gauss(0, sigma_perturbation)
+    neurone.bias = round(neurone.bias + perturbation, 15)
 
-def mutationModificationConnexionPoids(network):
-    """Modifie le poids d'une connexion influente, sinon aléatoire"""
-    connexions_importantes = trouverConnexionsInfluentes(network)
 
-    if connexions_importantes:
-        neurone, connexion = random.choice(connexions_importantes)
-        nouvelle_valeur = round(random.gauss(mu, sigmaPoids), 15)
-        connexion[1] = nouvelle_valeur  # modifier le poids
+
+def mutationModificationConnexionPoids(network, sigma_perturbation=1):
+    """Modifie en priorité une connexion influente en ajoutant une perturbation gaussienne"""
+    
+    connexions_influentes = trouverConnexionsInfluentes(network, seuil=0.5)  # seuil ajustable
+
+    if connexions_influentes:
+        # Tirage aléatoire dans les connexions influentes
+        neurone, connexion = random.choice(connexions_influentes)
+        perturbation = random.gauss(0, sigma_perturbation)
+        connexion[1] = round(connexion[1] + perturbation, 15)
     else:
-        # fallback classique
-        layer = chooseRandomLayer(network)[0]
+        # Fallback : mutation aléatoire (sans InputLayer)
+        hiddenOrOutputLayers = [layer for layer in network.layers if layer.label != "InputLayer"]
+        layer = random.choice(hiddenOrOutputLayers)
         neurone = chooseRandomNeurone(layer)[0]
         index = chooseRandomConnexion(neurone)
-        neurone.inputs[index][1] = round(random.gauss(mu, sigmaPoids), 15)
+        if index != -1:
+            perturbation = random.gauss(0, sigma_perturbation)
+            neurone.inputs[index][1] = round(neurone.inputs[index][1] + perturbation, 15)
+
+
 
 
 # -------------------- MUTATIONS SWAP (LAYER, NEURONE, CONNEXION) -------------------- #

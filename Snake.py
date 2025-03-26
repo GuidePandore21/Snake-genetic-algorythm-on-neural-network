@@ -131,7 +131,7 @@ def gameLoop():
         
         while gameClose: 
             print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness - 1)
-            saveNetwork(INDIVIDU, f"Save_Network/{COMPTEUR_GENERATION}" + "/" + str(COMPTEUR_INDIVIDU) + "_" + str(INDIVIDU.fitness) + ".json")
+            # saveNetwork(INDIVIDU, f"Save_Network/{COMPTEUR_GENERATION}" + "/" + str(COMPTEUR_INDIVIDU) + "_" + str(INDIVIDU.fitness) + ".json")
             saveNetwork(INDIVIDU, f"oldGen/{COMPTEUR_INDIVIDU}.json")
             
             if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
