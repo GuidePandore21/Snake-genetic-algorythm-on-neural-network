@@ -13,6 +13,10 @@ import os
 
 # -------------------- OUTILS -------------------- #
 
+mu = 0
+sigmaPoids = 6
+sigmaBias = 20
+
 def triRapide(liste):
     """tri une liste et la retourne
 
@@ -237,11 +241,11 @@ def neuroneGenerator(label, layerPrecedent):
     Returns:
         Neurone: Neurone créé
     """
-    bias = round(random.uniform(-100, 100), 15)
+    bias = round(random.gauss(mu, sigmaBias), 15)
     inputs = []
     listeNeuronesLayerPrecedent = layerPrecedent.neurones
     for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-        weight = round(random.uniform(-10, 10), 15)
+        weight = round(random.gauss(mu, sigmaPoids), 15)
         inputs.append([neurone, weight])
     return Neurone(label, bias, inputs)
 
@@ -290,11 +294,11 @@ def outputLayerGenerator(layerPrecedent, outputs):
     neurones = []
     for i in range(len(outputs)):
         label = "OutputNeurone" + str(i + 1)
-        bias = round(random.uniform(-100, 100), 15)
+        bias = round(random.gauss(mu, sigmaBias), 15)
         inputs = []
         listeNeuronesLayerPrecedent = layerPrecedent.neurones
         for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(-10, 10), 15)
+            weight = round(random.gauss(mu, sigmaPoids), 15)
             inputs.append([neurone, weight])
         neurones.append(OutputNeurone(label, bias, inputs, outputs[i]))
     return Layer("OutputLayer", neurones)
@@ -332,7 +336,7 @@ def createLayerConnexion(layer, layerPrecedent):
     for neurone in layer.neurones:
         inputs = []
         for neuroneCible in choisirDansListeSansRemise(layerPrecedent.neurones):
-            weight = round(random.uniform(-10, 10), 15)
+            weight = round(random.gauss(mu, sigmaPoids), 15)
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     return layer
@@ -454,7 +458,7 @@ def mutationCreationConnexion(network):
             except Exception as e:
                 print("Impossible d'ajouter une connexion")
                 return -1
-            weight = round(random.uniform(-10, 10), 15)
+            weight = round(random.gauss(mu, sigmaPoids), 15)
             network.layers[layer].neurones[randomNeurone].inputs.append([listeNeuronesNonConnexes[randomNeuroneNonConnexes], weight])
 
 def mutationCreationNeurone(network):
@@ -470,7 +474,7 @@ def mutationCreationNeurone(network):
             network.layers[layer].neurones.append(neuroneGenerator(label, network.layers[layer - 1]))
             listeNeuroneAConnecter = choisirDansListeSansRemise(network.layers[layer + 1].neurones)
             for neurone in listeNeuroneAConnecter:
-                weight = round(random.uniform(-10, 10), 15)
+                weight = round(random.gauss(mu, sigmaPoids), 15)
                 neurone.inputs.append([network.layers[layer].neurones[len(network.layers[layer].neurones) - 1], weight])
 
 def mutationCreationLayer(network):
@@ -495,7 +499,7 @@ def mutationModificationNeuroneBias(network):
     """
     neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
     neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
-    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-100, 100), 15)
+    neuroneBiasToModifyNeurone[0].bias = round(random.gauss(mu, sigmaBias), 15)
 
 def mutationModificationConnexionPoids(network):
     """Modifie le poids d'une connexion influente, sinon aléatoire"""
@@ -503,14 +507,14 @@ def mutationModificationConnexionPoids(network):
 
     if connexions_importantes:
         neurone, connexion = random.choice(connexions_importantes)
-        nouvelle_valeur = round(random.uniform(-10, 10), 15)
+        nouvelle_valeur = round(random.gauss(mu, sigmaPoids), 15)
         connexion[1] = nouvelle_valeur  # modifier le poids
     else:
         # fallback classique
         layer = chooseRandomLayer(network)[0]
         neurone = chooseRandomNeurone(layer)[0]
         index = chooseRandomConnexion(neurone)
-        neurone.inputs[index][1] = round(random.uniform(-10, 10), 15)
+        neurone.inputs[index][1] = round(random.gauss(mu, sigmaPoids), 15)
 
 
 # -------------------- MUTATIONS SWAP (LAYER, NEURONE, CONNEXION) -------------------- #
@@ -698,7 +702,7 @@ def mutationSuppressionLayer(network):
         inputs = []
         listeNeuronesLayerPrecedent = network.layers[layerToDeleteIndex - 1].neurones
         for neuroneCible in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(-10, 10), 15)
+            weight = round(random.gauss(mu, sigmaPoids), 15)
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     
