@@ -224,6 +224,15 @@ def chooseRandomConnexion(neurone):
     for connexionIndex in range(len(neurone.inputs)):
         if randomConnexion == connexionIndex:
             return randomConnexion
+        
+def randomPoidsLoiNormale(mu=0, sigma=6):
+    """Génère un poids avec une distribution normale"""
+    return round(random.gauss(mu, sigma), 15)
+
+def randomBiasLoiNormale(mu=0, sigma=20):
+    """Génère un biais avec une distribution normale"""
+    return round(random.gauss(mu, sigma), 15)
+
 
 # -------------------- CREATION INDIVIDU -------------------- #
 
@@ -237,11 +246,11 @@ def neuroneGenerator(label, layerPrecedent):
     Returns:
         Neurone: Neurone créé
     """
-    bias = round(random.uniform(-100, 100), 15)
+    bias = randomBiasLoiNormale()
     inputs = []
     listeNeuronesLayerPrecedent = layerPrecedent.neurones
     for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-        weight = round(random.uniform(-10, 10), 15)
+        weight = randomPoidsLoiNormale()
         inputs.append([neurone, weight])
     return Neurone(label, bias, inputs)
 
@@ -290,11 +299,11 @@ def outputLayerGenerator(layerPrecedent, outputs):
     neurones = []
     for i in range(len(outputs)):
         label = "OutputNeurone" + str(i + 1)
-        bias = round(random.uniform(-100, 100), 15)
+        bias = randomBiasLoiNormale()
         inputs = []
         listeNeuronesLayerPrecedent = layerPrecedent.neurones
         for neurone in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(-10, 10), 15)
+            weight = randomPoidsLoiNormale()
             inputs.append([neurone, weight])
         neurones.append(OutputNeurone(label, bias, inputs, outputs[i]))
     return Layer("OutputLayer", neurones)
@@ -332,7 +341,7 @@ def createLayerConnexion(layer, layerPrecedent):
     for neurone in layer.neurones:
         inputs = []
         for neuroneCible in choisirDansListeSansRemise(layerPrecedent.neurones):
-            weight = round(random.uniform(-10, 10), 15)
+            weight = randomPoidsLoiNormale()
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     return layer
@@ -416,6 +425,22 @@ def croisementPondere(individu1, individu2):
 
     return enfant
 
+# -------------------- MUTATIONS -------------------- #
+
+def trouverConnexionsInfluentes(network, seuil=0.5):
+    """Retourne les connexions influentes (poids élevés)"""
+    connexions = []
+
+    for layer in network.layers:
+        if layer.label in ["InputLayer", "OutputLayer"]:
+            continue
+        for neurone in layer.neurones:
+            for connexion in neurone.inputs:
+                poids = connexion[1]
+                if abs(poids) > seuil:
+                    connexions.append((neurone, connexion))
+                    
+    return connexions
 
 # -------------------- MUTATIONS CREATION (LAYER, NEURONE, CONNEXION) -------------------- #
 
@@ -438,7 +463,7 @@ def mutationCreationConnexion(network):
             except Exception as e:
                 print("Impossible d'ajouter une connexion")
                 return -1
-            weight = round(random.uniform(-10, 10), 15)
+            weight = randomPoidsLoiNormale()
             network.layers[layer].neurones[randomNeurone].inputs.append([listeNeuronesNonConnexes[randomNeuroneNonConnexes], weight])
 
 def mutationCreationNeurone(network):
@@ -454,7 +479,7 @@ def mutationCreationNeurone(network):
             network.layers[layer].neurones.append(neuroneGenerator(label, network.layers[layer - 1]))
             listeNeuroneAConnecter = choisirDansListeSansRemise(network.layers[layer + 1].neurones)
             for neurone in listeNeuroneAConnecter:
-                weight = round(random.uniform(-10, 10), 15)
+                weight = randomPoidsLoiNormale()
                 neurone.inputs.append([network.layers[layer].neurones[len(network.layers[layer].neurones) - 1], weight])
 
 def mutationCreationLayer(network):
@@ -471,26 +496,39 @@ def mutationCreationLayer(network):
 
 # -------------------- MUTATIONS MODIFICATION (NEURONE BIAS, CONNEXION POIDS) -------------------- #
 
-def mutationModificationNeuroneBias(network):
-    """modifie de manière aléatoire la valeur du bias d'un Neurone dans le Network
+def mutationModificationNeuroneBias(network, sigma_perturbation=5):
+    """Ajoute une perturbation gaussienne douce au biais d’un neurone, hors InputLayer"""
+    hiddenOrOutputLayers = [layer for layer in network.layers if layer.label != "InputLayer"]
+    layer = random.choice(hiddenOrOutputLayers)
+    neurone = chooseRandomNeurone(layer)[0]
 
-    Args:
-        network (Network): Network dans lequel la modification se fait
-    """
-    neuroneBiasToModifyLayer = chooseRandomAllLayer(network)
-    neuroneBiasToModifyNeurone = chooseRandomNeurone(neuroneBiasToModifyLayer[0])
-    neuroneBiasToModifyNeurone[0].bias = round(random.uniform(-100, 100), 15)
+    perturbation = random.gauss(0, sigma_perturbation)
+    neurone.bias = round(neurone.bias + perturbation, 15)
 
-def mutationModificationConnexionPoids(network):
-    """modifie de manière aléatoire la valeur du poids d'une connexion entre deux Neurones dans le Network
 
-    Args:
-        network (Network): Network dans lequel la modification se fait
-    """
-    connexionPoidsToModifyLayer = chooseRandomLayer(network)[0]
-    connexionPoidsToModifyNeurone = chooseRandomNeurone(connexionPoidsToModifyLayer)[0]
-    connexionPoidsToModifyConnexion = chooseRandomConnexion(connexionPoidsToModifyNeurone)
-    connexionPoidsToModifyNeurone.inputs[connexionPoidsToModifyConnexion][1] = round(random.random(), 15)
+
+def mutationModificationConnexionPoids(network, sigma_perturbation=1):
+    """Modifie en priorité une connexion influente en ajoutant une perturbation gaussienne"""
+    
+    connexions_influentes = trouverConnexionsInfluentes(network, seuil=0.5)  # seuil ajustable
+
+    if connexions_influentes:
+        # Tirage aléatoire dans les connexions influentes
+        neurone, connexion = random.choice(connexions_influentes)
+        perturbation = random.gauss(0, sigma_perturbation)
+        connexion[1] = round(connexion[1] + perturbation, 15)
+    else:
+        # Fallback : mutation aléatoire (sans InputLayer)
+        hiddenOrOutputLayers = [layer for layer in network.layers if layer.label != "InputLayer"]
+        layer = random.choice(hiddenOrOutputLayers)
+        neurone = chooseRandomNeurone(layer)[0]
+        index = chooseRandomConnexion(neurone)
+        if index != -1:
+            perturbation = random.gauss(0, sigma_perturbation)
+            neurone.inputs[index][1] = round(neurone.inputs[index][1] + perturbation, 15)
+
+
+
 
 # -------------------- MUTATIONS SWAP (LAYER, NEURONE, CONNEXION) -------------------- #
 
@@ -677,7 +715,7 @@ def mutationSuppressionLayer(network):
         inputs = []
         listeNeuronesLayerPrecedent = network.layers[layerToDeleteIndex - 1].neurones
         for neuroneCible in choisirDansListeSansRemise(listeNeuronesLayerPrecedent):
-            weight = round(random.uniform(-10, 10), 15)
+            weight = randomPoidsLoiNormale()
             inputs.append([neuroneCible, weight])
         neurone.inputs = inputs
     
