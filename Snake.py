@@ -10,7 +10,8 @@ from SaveAndLoadSnake import *
 # -------------------- VARIABLES GLOBALES SNAKE -------------------- #
 
 GRILLE = Grille(DIS_HEIGHT // SNAKE_BLOCK, DIS_WIDTH // SNAKE_BLOCK)
-INPUTS = GRILLE.matrice.flatten().tolist()
+# INPUTS = GRILLE.matrice.flatten().tolist()
+INPUTS = [0 for _ in range(18)]
 OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 
 POPULATION = initGeneration(INPUTS, OUTPUTS)
@@ -94,6 +95,57 @@ def generateFoodPositionTemplate():
 
     return coordinates
 
+def getDirectionalInputs(snakeList, foodPosition, grille):
+    headX, headY = snakeList[-1]
+    maxY, maxX = grille.shape
+
+    directions = {
+        "UP": (0, -1),
+        "DOWN": (0, 1),
+        "LEFT": (-1, 0),
+        "RIGHT": (1, 0)
+    }
+
+    vision = []
+
+    for dx, dy in directions.values():
+        distance = 1
+        foundBody = 0
+        foundFood = 0
+        x, y = headX + dx, headY + dy
+
+        while 0 <= x < maxX and 0 <= y < maxY:
+            if grille[y][x] == -1 and not foundBody:
+                foundBody = 1
+            if grille[y][x] == 1 and not foundFood:
+                foundFood = 1
+            x += dx
+            y += dy
+            distance += 1
+
+        distanceMur = 1 / distance
+        vision.extend([distanceMur, foundBody, foundFood])
+
+    # Direction actuelle du serpent (one-hot)
+    if len(snakeList) >= 2:
+        dx = snakeList[-1][0] - snakeList[-2][0]
+        dy = snakeList[-1][1] - snakeList[-2][1]
+        directionOneHot = {
+            (0, -1): [1, 0, 0, 0],  # UP
+            (0, 1): [0, 1, 0, 0],   # DOWN
+            (-1, 0): [0, 0, 1, 0],  # LEFT
+            (1, 0): [0, 0, 0, 1],   # RIGHT
+        }.get((dx, dy), [0, 0, 0, 0])
+    else:
+        directionOneHot = [0, 0, 0, 0]
+
+    # Position relative à la pomme
+    foodX, foodY = foodPosition
+    positionRelativePommeX = (foodX - headX) / maxX
+    positionRelativePommeY = (foodY - headY) / maxY
+
+    return vision + directionOneHot + [positionRelativePommeX, positionRelativePommeY]
+
 all_counts = []
 all_fitnesses = []
 all_generation = []
@@ -109,11 +161,11 @@ def gameLoop():
     lenSnake = 1
 
     # Positionnement initial de la pomme
-    # foodPosition = generateFoodPosition()
+    foodPosition = generateFoodPosition()
     
-    listeFoodPosition = generateFoodPositionTemplate()
-    compteurPomme = 0
-    foodPosition = listeFoodPosition[compteurPomme]
+    # listeFoodPosition = generateFoodPositionTemplate()
+    # compteurPomme = 0
+    # foodPosition = listeFoodPosition[compteurPomme]
 
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
@@ -124,7 +176,8 @@ def gameLoop():
     # INDIVIDU.fitness = 0
     INDIVIDU.fitness = fitnessPenaliteTailleSnake(INDIVIDU)
     
-    INPUTS = GRILLE.matrice.flatten().tolist()
+    # INPUTS = GRILLE.matrice.flatten().tolist()
+    INPUTS = getDirectionalInputs(snakeList, foodPosition, GRILLE.matrice)
     INDIVIDU.miseAJourInputValue(INPUTS)
 
     while not gameOver:
@@ -150,7 +203,8 @@ def gameLoop():
         
         # Mettre à jour la grille
         GRILLE.updateGrille(snakeList, foodPosition)
-        INPUTS = GRILLE.matrice.flatten().tolist()
+        # INPUTS = GRILLE.matrice.flatten().tolist()
+        INPUTS = getDirectionalInputs(snakeList, foodPosition, GRILLE.matrice)
         INDIVIDU.miseAJourInputValue(INPUTS)
         
         # print(INPUTS)
@@ -186,9 +240,9 @@ def gameLoop():
                 lenSnake += 1
                 INDIVIDU.fitness += BONUS_POMME
                 CHECKLOOP = 0
-                # foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
-                compteurPomme += 1
-                foodPosition = listeFoodPosition[compteurPomme]
+                foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
+                # compteurPomme += 1
+                # foodPosition = listeFoodPosition[compteurPomme]
             else :
                 if currentDistance < previousDistance:
                     INDIVIDU.fitness += BONUS_RAPPROCHEMENT_POMME
