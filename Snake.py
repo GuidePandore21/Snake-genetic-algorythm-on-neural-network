@@ -264,9 +264,14 @@ def gameLoop():
                 gameClose = True
                 # print("penalité boucle infinie")
                 
+            CHECKLOOP_MAX_SIZE = 15
             CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
-            if len(CHECKLOOPPOSITION) > 4:
+            if len(CHECKLOOPPOSITION) > CHECKLOOP_MAX_SIZE:
                 CHECKLOOPPOSITION.pop(0)
+            if CHECKLOOPPOSITION.count(GRILLE.matrice.flatten().tolist()) > 2:
+                INDIVIDU.fitness += PENALITE_ERREUR * 2
+                gameClose = True
+
 
             DIS.fill(BLACK)
             pygame.draw.rect(DIS, RED, [foodPosition[0] * SNAKE_BLOCK, foodPosition[1] * SNAKE_BLOCK, SNAKE_BLOCK, SNAKE_BLOCK])
