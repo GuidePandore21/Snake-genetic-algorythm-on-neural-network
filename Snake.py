@@ -11,7 +11,7 @@ from SaveAndLoadSnake import *
 
 GRILLE = Grille(DIS_HEIGHT // SNAKE_BLOCK, DIS_WIDTH // SNAKE_BLOCK)
 # INPUTS = GRILLE.matrice.flatten().tolist()
-INPUTS = [0 for _ in range(18)]
+INPUTS = [0 for _ in range(20)]
 OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 
 POPULATION = initGeneration(INPUTS, OUTPUTS)
@@ -144,7 +144,10 @@ def getDirectionalInputs(snakeList, foodPosition, grille):
     positionRelativePommeX = (foodX - headX) / maxX
     positionRelativePommeY = (foodY - headY) / maxY
 
-    return vision + directionOneHot + [positionRelativePommeX, positionRelativePommeY]
+    tailleSerpentRelativeGrille = len(snakeList) / (grille.size)
+    nbCasesLibresRelativeGrille = np.count_nonzero(grille == 0) / grille.size
+    
+    return vision + directionOneHot + [positionRelativePommeX, positionRelativePommeY, tailleSerpentRelativeGrille, nbCasesLibresRelativeGrille]
 
 all_counts = []
 all_fitnesses = []
