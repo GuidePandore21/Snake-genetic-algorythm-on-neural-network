@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import pandas as pd
+from collections import deque
 
 from configSnake import *
 from AlgorithmeGenetique import *
@@ -149,6 +150,45 @@ def getDirectionalInputs(snakeList, foodPosition, grille):
     
     return vision + directionOneHot + [positionRelativePommeX, positionRelativePommeY, tailleSerpentRelativeGrille, nbCasesLibresRelativeGrille]
 
+def casesAccessibles(grille, positionTete):
+    maxY, maxX = grille.shape
+    visited = np.zeros_like(grille)
+    queue = deque([positionTete])
+    accessibles = 0
+
+    while queue:
+        x, y = queue.popleft()
+
+        if x < 0 or x >= maxX or y < 0 or y >= maxY:
+            continue
+        if visited[y][x] or grille[y][x] == -1:
+            continue
+
+        visited[y][x] = 1
+        accessibles += 1
+
+        queue.extend([(x+1, y), (x-1, y), (x, y+1), (x, y-1)])
+
+    return accessibles
+
+def finalFitnessAdjustments(individu, snakeList, grille, historiquePositions, movesSinceLastApple):
+    headX, headY = snakeList[-1]
+
+    # Bonus exponentiel taille serpent (généralisation stratégie)
+    taille_serpent = len(snakeList)
+    individu.fitness += (taille_serpent ** 3)  # Très fort bonus exponentiel à ajuster au besoin
+
+    # Pénalité sévère si serpent s'est enfermé
+    nbCasesAccessibles = casesAccessibles(grille.matrice, (headX, headY))
+    ratio_accessibles = nbCasesAccessibles / grille.matrice.size
+
+    if ratio_accessibles < 0.1:
+        individu.fitness += PENALITE_IMPASSE * (1 - ratio_accessibles)  # sévère
+
+    # Pénalité si serpent n'a pas mangé depuis trop longtemps
+    if movesSinceLastApple > MAX_MOVES_WITHOUT_FOOD:
+        individu.fitness += PENALITE_INNACTION * (movesSinceLastApple - MAX_MOVES_WITHOUT_FOOD)
+
 all_counts = []
 all_fitnesses = []
 all_generation = []
@@ -158,6 +198,11 @@ def gameLoop():
 
     gameOver = False
     gameClose = False
+    
+    deplacementsSnake = []
+    movesSinceLastApple = 0
+    historiquePositions = []
+    positionsVisitees = set()
 
     # Position initiale du serpent
     snakeList = [[DIS_WIDTH // SNAKE_BLOCK // 2, DIS_HEIGHT // SNAKE_BLOCK // 2]]
@@ -190,6 +235,19 @@ def gameLoop():
             # saveNetwork(INDIVIDU, f"Save_Network/{COMPTEUR_GENERATION}" + "/" + str(COMPTEUR_INDIVIDU) + "_" + str(INDIVIDU.fitness) + ".json")
             saveNetwork(INDIVIDU, f"oldGen/{COMPTEUR_INDIVIDU}.json")
             
+            isIdiot = True
+            premierDeplacement = deplacementsSnake[0]
+            for deplacement in deplacementsSnake[1:]:
+                if deplacement != premierDeplacement:
+                    isIdiot = False
+                    break
+            
+            if isIdiot:
+                INDIVIDU.fitness += PENALITE_IDIOT
+            
+            # Appel une fonction de calcul final de fitness
+            finalFitnessAdjustments(INDIVIDU, snakeList, GRILLE, historiquePositions, movesSinceLastApple)
+            
             if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
                 BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
             CHECKLOOPPOSITION = []
@@ -202,7 +260,7 @@ def gameLoop():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     gameClose = True
-                    INDIVIDU.fitness = PENALITE_ERREUR
+                    INDIVIDU.fitness = PENALITE_LOOP
         
         # Mettre à jour la grille
         GRILLE.updateGrille(snakeList, foodPosition)
@@ -212,6 +270,7 @@ def gameLoop():
         
         # print(INPUTS)
         deplacement = INDIVIDU.outputNetwork()
+        deplacementsSnake.append(deplacement)
         # print(deplacement)
 
         headX, headY = snakeList[-1]
@@ -242,6 +301,8 @@ def gameLoop():
             if (headX, headY) == foodPosition:
                 lenSnake += 1
                 INDIVIDU.fitness += BONUS_POMME
+                movesSinceLastApple = 0  # Reset compteur
+                historiquePositions.clear()  # Reset historique
                 CHECKLOOP = 0
                 foodPosition = [random.randint(0, DIS_WIDTH // SNAKE_BLOCK - 1), random.randint(0, DIS_HEIGHT // SNAKE_BLOCK - 1)]
                 # compteurPomme += 1
@@ -253,24 +314,24 @@ def gameLoop():
                     INDIVIDU.fitness += PENALITE_ELOIGNEMENT_POMME
             previousDistance = currentDistance
 
+            movesSinceLastApple += 1
+            historiquePositions.append((headX, headY))
+            positionsVisitees.add((headX, headY))
+
+            INDIVIDU.fitness += BONUS_SURVIE
+
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
             
-            # print(CHECKLOOPPOSITION)
-            
-            if GRILLE.matrice.flatten().tolist() in CHECKLOOPPOSITION:
-                INDIVIDU.fitness += PENALITE_ERREUR
-                CHECKLOOPPOSITION = []
-                gameClose = True
-                # print("penalité boucle infinie")
-                
-            CHECKLOOP_MAX_SIZE = 15
             CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
             if len(CHECKLOOPPOSITION) > CHECKLOOP_MAX_SIZE:
                 CHECKLOOPPOSITION.pop(0)
-            if CHECKLOOPPOSITION.count(GRILLE.matrice.flatten().tolist()) > 2:
-                INDIVIDU.fitness += PENALITE_ERREUR * 2
+            
+            if GRILLE.matrice.flatten().tolist() in CHECKLOOPPOSITION:
+                INDIVIDU.fitness += PENALITE_LOOP
+                CHECKLOOPPOSITION = []
                 gameClose = True
+                # print("penalité boucle infinie")
 
 
             DIS.fill(BLACK)
@@ -279,7 +340,6 @@ def gameLoop():
             pygame.display.update()
 
             CLOCK.tick(SNAKE_SPEED)
-            INDIVIDU.fitness += BONUS_SURVIE
         else:
             INDIVIDU.fitness += PENALITE_SORTIE # Penalité pour sortie de l'écran
             # print("penalité sortie de l'écran")
