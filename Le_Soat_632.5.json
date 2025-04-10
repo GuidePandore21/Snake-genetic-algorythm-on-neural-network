@@ -1,0 +1,1488 @@
+{
+    "fitness": 632.5,
+    "layers": [
+        {
+            "label": "InputLayer",
+            "neurones": [
+                {
+                    "label": "InputNeurone1",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 1.0
+                },
+                {
+                    "label": "InputNeurone2",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone3",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone4",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0.16666666666666666
+                },
+                {
+                    "label": "InputNeurone5",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone6",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone7",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0.16666666666666666
+                },
+                {
+                    "label": "InputNeurone8",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 1
+                },
+                {
+                    "label": "InputNeurone9",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone10",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 1.0
+                },
+                {
+                    "label": "InputNeurone11",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone12",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone13",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone14",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone15",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0
+                },
+                {
+                    "label": "InputNeurone16",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 1
+                },
+                {
+                    "label": "InputNeurone17",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": -0.16666666666666666
+                },
+                {
+                    "label": "InputNeurone18",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0.16666666666666666
+                },
+                {
+                    "label": "InputNeurone19",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0.16666666666666666
+                },
+                {
+                    "label": "InputNeurone20",
+                    "bias": null,
+                    "inputs": [],
+                    "valeurOutput": null,
+                    "inputData": 0.8055555555555556
+                }
+            ]
+        },
+        {
+            "label": "HiddenLayer1",
+            "neurones": [
+                {
+                    "label": "HiddenLayer1Neurone1",
+                    "bias": 9.320863389736596,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": -1.0774954289975536
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 1.5498718290601239
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": -4.193162911853289
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": 7.91086608247555
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": 0.6489768419517745
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": 0.8840156102359193
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -5.29943469127293
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": 3.7246695710405353
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 0.8679543180568816
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": -1.4202124695074727
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": 4.070795906936478
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone2",
+                    "bias": 30.863022399174895,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": 2.2795193315391846
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": -0.030074599963087582
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 5.876136795504661
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -2.321351391449726
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 3.081260412266869
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": -3.7722357075296635
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": -0.13677477178502875
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": 1.1701400693614572
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone3",
+                    "bias": -5.862425457771796,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": 6.502468497122015
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": -8.397069867907527
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": 0.35600012852680235
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": -0.11511607080660707
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 17.795279271683174
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": 3.14212667164412
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": 10.065926816447519
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": -2.7459612324520375
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 5.950243962555773
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": 5.652952478743151
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 0.5871608839550728
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": -7.098507668988166
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": 0.16767714188462812
+                        },
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": -1.2094713020198846
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": 7.86499251908891
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -5.916022691926148
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": 3.8488340213268053
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": 2.1923043273805525
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 2.9361955401266053
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": -8.327251788083265
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone4",
+                    "bias": 13.829213351202883,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": 1.6927808646284603
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 1.5955260585559536
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": 3.786938631230379
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": -5.0140900824861285
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": -3.4318560568282104
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone5",
+                    "bias": -22.934590031458953,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": -1.846534406461352
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": -0.8126844603318198
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -4.217199640896565
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": 3.573710418503806
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": -1.220228283286845
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 0.9809125818092178
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": 2.0467690413290813
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": 3.15070694319639
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": -1.1767982024750963
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 2.015169081831518
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": 5.036020309384526
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 2.378440256713171
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": 5.946142575037252
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": -0.31574438558037315
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone6",
+                    "bias": -11.230212172288756,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": 0.5114194810645938
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": 1.7904586706073673
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": 1.4809848789491054
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -0.3496550421622552
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": 0.9531501767184537
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": -0.9295217198108504
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 4.312382274049437
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": -0.061830491637245445
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": 3.1963537388339307
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": -3.2502430881518425
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 5.372875837021741
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 7.84175337882201
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": -0.24693228940121564
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone7",
+                    "bias": 10.628464824703453,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": 3.61437708531449
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 0.33133258603610444
+                        },
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": -6.523263945998735
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": -1.7670220777482957
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": -2.770773733622444
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": -0.24484978836682306
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 3.925165958476145
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -0.9756569315435896
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": -2.122772773018516
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": -1.6627917237818006
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": -5.015089644243744
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": -7.186640987951389
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone8",
+                    "bias": -22.225177986600837,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": 0.5714170667558325
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": -1.315578330068491
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 1.8658197559931073
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -0.8481363528988682
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": 2.651193017116176
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 2.343829646775097
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 1.9888502561154888
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 4.149896021178724
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": -5.402192904614405
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": -3.061026825443313
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": 0.15980685240011322
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": 0.14471347346007207
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 5.797893740886951
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": 1.5266811240866514
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": -0.5173581167685546
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": -0.20204893833044862
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": -6.567779953778553
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone9",
+                    "bias": -21.6752774729947,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": -1.2308745712100648
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": 0.5997140888135002
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": -1.649626062033743
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": 1.4343883540930529
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": -5.136584004998438
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": -2.9040521547240035
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": 8.997041681322301
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 0.9211352706770927
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 0.0648219879075962
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": -4.90096870728709
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": -4.5349856365162085
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": -2.121996254086634
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": -6.2721503853043785
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -1.163707017908029
+                        },
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": 5.986232248647473
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": -4.840385047766995
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 0.668599629594465
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": 4.564651606589632
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": -0.6921212028613934
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone10",
+                    "bias": 14.004473204190102,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": -6.272498457682185
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": -1.1923913612035295
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": 0.4476970923996736
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": 0.5829482316232077
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": 1.2060812540820511
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone11",
+                    "bias": -0.882488102848957,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": 1.7856645464239713
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": -6.069984148981776
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": 2.1812613516519446
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 5.044045433817753
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 1.3616854021776135
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 10.346807676232254
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 1.040092518239782
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 1.9845064396681118
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": 0.3684346127842329
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": 1.9440932947253013
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": 3.4976265775278015
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": -3.278432608043441
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone12",
+                    "bias": -32.16506452163073,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 1.7310530000773816
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": 3.592881712743193
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 0.16873762323107488
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 4.69517779048733
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 2.0497112046111385
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 2.090452189862016
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": 0.39283092841342426
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": 4.976100553908046
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": 7.759829282870523
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": -4.106085743555898
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": 1.7674970173420284
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": 0.6336465975821691
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": -3.6358263098655095
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": -1.715171654901132
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": -5.265259905878166
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone13",
+                    "bias": 13.252246271785799,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": 4.759073205562742
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -0.8400436929133605
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": 1.3614338031633884
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -5.3851854413139435
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": 0.9882184883168189
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 1.9359305196374177
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 2.4012315216087323
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": 2.0103790089079134
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone14",
+                    "bias": -18.405138085726932,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": 2.048988084341347
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": 2.7170018986315356
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 1.2360274000433855
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 4.45114376818367
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": 2.362334717106908
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": -2.133387650697314
+                        },
+                        {
+                            "neurone": "InputNeurone11",
+                            "weight": 6.366245201172232
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": -1.0348162822262148
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": 2.8492216405134982
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": 4.643251278125621
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone15",
+                    "bias": -16.907156935711527,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 2.079077015663474
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": -3.053550689567219
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 0.7039927835498532
+                        },
+                        {
+                            "neurone": "InputNeurone9",
+                            "weight": 5.255036040003356
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -1.9298841201379193
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": 1.88512183213992
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -1.2117220311503694
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": -3.189489392322505
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": -2.7410240250529947
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 1.080229637529955
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": -3.434886196421817
+                        },
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": 0.4508256319277508
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 1.0197275300807631
+                        },
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": 2.620204236560471
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": 3.380066331625264
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": -6.073106253946974
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": 4.8611975540934464
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": 3.691452700284216
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": 3.7435326277341714
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone16",
+                    "bias": 15.29288364180097,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": -8.150063137694609
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": 4.936968699758467
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": -1.5018280101131767
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 3.5629061592508733
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -4.616244013196557
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": -0.6466182416071862
+                        },
+                        {
+                            "neurone": "InputNeurone17",
+                            "weight": 4.693783047659515
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": -3.5171291023947058
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": -1.6239930797202962
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone17",
+                    "bias": 15.39830262151206,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": -2.6468524408030873
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": -0.39145198867718056
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 1.4854472366468836
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": -0.44425266292078985
+                        },
+                        {
+                            "neurone": "InputNeurone5",
+                            "weight": -1.6656034470132068
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": 1.1775262524158232
+                        },
+                        {
+                            "neurone": "InputNeurone14",
+                            "weight": -4.013908324314448
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": -0.14717006590858364
+                        },
+                        {
+                            "neurone": "InputNeurone3",
+                            "weight": -4.688255202663228
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -5.362993083286891
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 2.0541745768846167
+                        },
+                        {
+                            "neurone": "InputNeurone15",
+                            "weight": 9.372931929718415
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": -2.8429512703972755
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone18",
+                    "bias": -23.115319944759957,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": 0.00766277954712451
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": 6.240479117579426
+                        },
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": 1.651013034332781
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": -2.583503984854561
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 2.7614711938517384
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone19",
+                    "bias": -5.283368369424723,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": -0.8494440257737235
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -2.499978235541269
+                        },
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": 1.9708583792549912
+                        },
+                        {
+                            "neurone": "InputNeurone19",
+                            "weight": -3.2898908740941524
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone20",
+                    "bias": -19.144453319155478,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone12",
+                            "weight": -1.6471575101328308
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": -0.5865099818613531
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": -3.7570016128084847
+                        },
+                        {
+                            "neurone": "InputNeurone7",
+                            "weight": 4.811255204213069
+                        },
+                        {
+                            "neurone": "InputNeurone2",
+                            "weight": 2.1864279659225834
+                        },
+                        {
+                            "neurone": "InputNeurone10",
+                            "weight": 5.893700244213839
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 3.7350095677051725
+                        },
+                        {
+                            "neurone": "InputNeurone16",
+                            "weight": 2.330656671088108
+                        },
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -1.5801008036125792
+                        },
+                        {
+                            "neurone": "InputNeurone1",
+                            "weight": -5.83444354024553
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                },
+                {
+                    "label": "HiddenLayer1Neurone21",
+                    "bias": 28.744331997856403,
+                    "inputs": [
+                        {
+                            "neurone": "InputNeurone4",
+                            "weight": -4.588899204439944
+                        },
+                        {
+                            "neurone": "InputNeurone8",
+                            "weight": 3.057085131202126
+                        },
+                        {
+                            "neurone": "InputNeurone13",
+                            "weight": 0.7208259246738635
+                        },
+                        {
+                            "neurone": "InputNeurone20",
+                            "weight": 3.1093648398334124
+                        },
+                        {
+                            "neurone": "InputNeurone18",
+                            "weight": -1.954100036735364
+                        },
+                        {
+                            "neurone": "InputNeurone6",
+                            "weight": 1.7758996393628843
+                        }
+                    ],
+                    "valeurOutput": null,
+                    "inputData": null
+                }
+            ]
+        },
+        {
+            "label": "OutputLayer",
+            "neurones": [
+                {
+                    "label": "OutputNeurone1",
+                    "bias": -7.316589294325758,
+                    "inputs": [
+                        {
+                            "neurone": "HiddenLayer1Neurone10",
+                            "weight": -10.809813594378605
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone6",
+                            "weight": 5.608199657340631
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone18",
+                            "weight": 6.177029358833924
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone20",
+                            "weight": -1.671456689535929
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone11",
+                            "weight": 1.725004143375194
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone2",
+                            "weight": 4.39224089321712
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone15",
+                            "weight": 3.190009271767082
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone4",
+                            "weight": 1.78340408140249
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone8",
+                            "weight": 0.178903014138869
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone13",
+                            "weight": -3.794512743618913
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone21",
+                            "weight": 2.928859377264433
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone3",
+                            "weight": 1.339221186309412
+                        }
+                    ],
+                    "valeurOutput": "UP",
+                    "inputData": null
+                },
+                {
+                    "label": "OutputNeurone2",
+                    "bias": -6.819239926694602,
+                    "inputs": [
+                        {
+                            "neurone": "HiddenLayer1Neurone10",
+                            "weight": 3.432038781276516
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone20",
+                            "weight": -1.285076962892272
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone11",
+                            "weight": -1.678086375156274
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone16",
+                            "weight": -4.323351572173094
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone13",
+                            "weight": 5.129925946808417
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone18",
+                            "weight": -2.522025738622688
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone9",
+                            "weight": 6.506885809473395
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone19",
+                            "weight": -1.143636372539089
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone21",
+                            "weight": -5.91597082348267
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone2",
+                            "weight": 7.906724669433656
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone14",
+                            "weight": 4.094708619385241
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone15",
+                            "weight": -3.078549198553249
+                        }
+                    ],
+                    "valeurOutput": "DOWN",
+                    "inputData": null
+                },
+                {
+                    "label": "OutputNeurone3",
+                    "bias": 12.724840061922967,
+                    "inputs": [
+                        {
+                            "neurone": "HiddenLayer1Neurone21",
+                            "weight": 4.415399740128617
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone16",
+                            "weight": -3.221220319996293
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone8",
+                            "weight": 5.549543940031908
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone20",
+                            "weight": -0.051130098011624
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone3",
+                            "weight": -3.445436213624665
+                        }
+                    ],
+                    "valeurOutput": "LEFT",
+                    "inputData": null
+                },
+                {
+                    "label": "OutputNeurone4",
+                    "bias": -17.678507749371587,
+                    "inputs": [
+                        {
+                            "neurone": "HiddenLayer1Neurone5",
+                            "weight": 3.699737510752219
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone15",
+                            "weight": 3.897781898523125
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone17",
+                            "weight": -1.164868077002132
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone20",
+                            "weight": -7.450213874988201
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone7",
+                            "weight": -8.266192162331755
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone18",
+                            "weight": -4.16876678863547
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone8",
+                            "weight": -4.988704445930289
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone19",
+                            "weight": 9.36539530009251
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone1",
+                            "weight": 1.627124661318505
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone3",
+                            "weight": 12.525087063375919
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone4",
+                            "weight": 3.029451217930451
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone9",
+                            "weight": -0.661269118433659
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone14",
+                            "weight": 2.522990521549373
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone16",
+                            "weight": -4.820646152794911
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone13",
+                            "weight": 3.151540571452851
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone10",
+                            "weight": -7.957304535850581
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone6",
+                            "weight": -2.646266030969361
+                        },
+                        {
+                            "neurone": "HiddenLayer1Neurone2",
+                            "weight": 1.270824070556311
+                        }
+                    ],
+                    "valeurOutput": "RIGHT",
+                    "inputData": null
+                }
+            ]
+        }
+    ]
+}

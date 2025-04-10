@@ -505,8 +505,6 @@ def mutationModificationNeuroneBias(network, sigma_perturbation=5):
     perturbation = random.gauss(0, sigma_perturbation)
     neurone.bias = round(neurone.bias + perturbation, 15)
 
-
-
 def mutationModificationConnexionPoids(network, sigma_perturbation=1):
     """Modifie en priorité une connexion influente en ajoutant une perturbation gaussienne"""
     
@@ -526,9 +524,6 @@ def mutationModificationConnexionPoids(network, sigma_perturbation=1):
         if index != -1:
             perturbation = random.gauss(0, sigma_perturbation)
             neurone.inputs[index][1] = round(neurone.inputs[index][1] + perturbation, 15)
-
-
-
 
 # -------------------- MUTATIONS SWAP (LAYER, NEURONE, CONNEXION) -------------------- #
 
@@ -760,6 +755,10 @@ def selectionParAdaptation(population):
     """Sélectionne les individus selon une Roulette Wheel Selection, même avec des fitness négatives."""
     
     min_fitness = min(individu.fitness for individu in population)
+    if len(population) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION + 1):
+        nbSelectionnes = len(population)
+    else:
+        nbSelectionnes = int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION + 1)
 
     # Décaler les fitness pour qu'elles soient toutes positives
     if min_fitness < 0:
@@ -771,13 +770,13 @@ def selectionParAdaptation(population):
     total_fitness = sum(fitness_ajustees)
 
     if total_fitness == 0:
-        return random.sample(population, int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION))
+        return random.sample(population, nbSelectionnes)
 
     probabilites = [fitness / total_fitness for fitness in fitness_ajustees]
     cumulees = [sum(probabilites[:i+1]) for i in range(len(probabilites))]
 
     selectionnes = []
-    for _ in range(int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION)):
+    for _ in range(nbSelectionnes):
         r = random.random()  # Nombre aléatoire entre 0 et 1
         for i, seuil in enumerate(cumulees):
             if r <= seuil:
@@ -837,10 +836,16 @@ def reproductionMeilleur(population):
         [Network] : liste d'individu pour la prochaine génération
     """
 
+    population = chargerTousLesFichiersDUnDossier("oldGen")
     population = list(reversed(population))
     
+    if len(population) < int(NB_INDIVIDU * NB_REPRODUCTION_MEILLEUR / 2):
+        nbSelectionnes = len(population)
+    else:
+        nbSelectionnes = int(NB_INDIVIDU * NB_REPRODUCTION_MEILLEUR / 2)
+    
     newGen = []
-    for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_MEILLEUR / 2)):
+    for i in range(nbSelectionnes):
         child = croisementPondere(population[i], population[-i - 1])
         newGen.append(copy.deepcopy(child))
 
@@ -855,10 +860,16 @@ def reproductionMeilleur(population):
     return newGen
 
 def reproductionAleatoire(population):
+    population = chargerTousLesFichiersDUnDossier("oldGen")
     random.shuffle(population)
     
+    if len(population) < int(NB_INDIVIDU * NB_REPRODUCTION_MEILLEUR / 2):
+        nbSelectionnes = len(population)
+    else:
+        nbSelectionnes = int(NB_INDIVIDU * NB_REPRODUCTION_MEILLEUR / 2)
+    
     newGen = []
-    for i in range(int(NB_INDIVIDU * NB_REPRODUCTION_ALEATOIRE / 2)):
+    for i in range(nbSelectionnes):
         child = croisementPondere(population[i], population[-i - 1])
         newGen.append(copy.deepcopy(child))
 
@@ -925,6 +936,7 @@ def nouvelleGeneration(populationPrecedente, INPUTS, OUTPUTS):
     Returns:
         [Network]: Nouvelle génération
     """    
+    populationPrecedente = chargerTousLesFichiersDUnDossier("oldGen")
     populationPrecedenteTrie = triRapide(populationPrecedente)
     
     tempGen = []
