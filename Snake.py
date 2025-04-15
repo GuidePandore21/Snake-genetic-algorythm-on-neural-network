@@ -15,8 +15,8 @@ GRILLE = Grille(DIS_HEIGHT // SNAKE_BLOCK, DIS_WIDTH // SNAKE_BLOCK)
 INPUTS = [0 for _ in range(20)]
 OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 
-# POPULATION = initGeneration(INPUTS, OUTPUTS)
-POPULATION = [copy.deepcopy(loadNetwork("Le_Soat_632.5.json")) for i in range(NB_INDIVIDU)]
+POPULATION = initGeneration(INPUTS, OUTPUTS)
+# POPULATION = [copy.deepcopy(loadNetwork("Le_Soat_632.5.json")) for i in range(NB_INDIVIDU)]
 
     
 BEST_INDIVIDU = Network([])
@@ -69,6 +69,13 @@ def generateFoodPosition(premierePomme=False):
         return None
 
     return tuple(random.choice(zeroPositions))
+
+def generateFoodPositionHybride(apprentissageDirige=3):
+    listePommes = []
+    listePommesTemplate = generateFoodPositionTemplate()
+    for i in range(12):
+        listePommes.append(listePommesTemplate[i * 3])
+    return listePommes
 
 def generateFoodPositionTemplate():
     coordinates = []
@@ -212,11 +219,12 @@ def gameLoop():
     lenSnake = 1
 
     # Positionnement initial de la pomme
-    foodPosition = generateFoodPosition(True)
+    # foodPosition = generateFoodPosition(True)
     
+    listeFoodPosition = generateFoodPositionHybride()
     # listeFoodPosition = generateFoodPositionTemplate()
-    # compteurPomme = 0
-    # foodPosition = listeFoodPosition[compteurPomme]
+    compteurPomme = 0
+    foodPosition = listeFoodPosition[compteurPomme]
 
     # Mettre à jour la grille
     GRILLE.updateGrille(snakeList, foodPosition)
@@ -224,8 +232,8 @@ def gameLoop():
     previousDistance = GRILLE.distanceManhattan(snakeList[-1], foodPosition)
 
     INDIVIDU = POPULATION[COMPTEUR_INDIVIDU - 1]
-    INDIVIDU.fitness = 0
-    # INDIVIDU.fitness = fitnessPenaliteTailleSnake(INDIVIDU)
+    # INDIVIDU.fitness = 0
+    INDIVIDU.fitness = fitnessPenaliteTailleSnake(INDIVIDU)
     
     # INPUTS = GRILLE.matrice.flatten().tolist()
     INPUTS = getDirectionalInputs(snakeList, foodPosition, GRILLE.matrice)
@@ -310,8 +318,11 @@ def gameLoop():
                 movesSinceLastApple = 0  # Reset compteur
                 historiquePositions.clear()  # Reset historique
                 CHECKLOOP = 0
-                foodPosition = generateFoodPosition()
-                # compteurPomme += 1
+                compteurPomme += 1
+                if compteurPomme > 12:
+                    foodPosition = generateFoodPosition()
+                else:
+                    foodPosition = listeFoodPosition[compteurPomme]
                 # foodPosition = listeFoodPosition[compteurPomme]
             else :
                 if currentDistance < previousDistance:
