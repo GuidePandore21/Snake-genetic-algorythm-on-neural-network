@@ -18,14 +18,12 @@ CHECKLOOP_MAX_SIZE = 36
 
 MAX_MOVES_WITHOUT_FOOD = 20
 
-# -------------------- Bonus -------------------- #
-
+# Bonus équilibrés pour encourager un comportement optimal
 BONUS_POMME = 100
 BONUS_RAPPROCHEMENT_POMME = 3
 BONUS_SURVIE = 0.5
 
-# -------------------- Pénalités -------------------- #
-
+# Pénalités équilibrées pour éviter comportements non productifs
 PENALITE_TAILLE = 0.0001
 PENALITE_COLLISION = -250
 PENALITE_SORTIE = -100
