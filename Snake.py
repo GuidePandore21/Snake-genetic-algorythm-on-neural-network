@@ -18,12 +18,14 @@ OUTPUTS = ["UP", "DOWN", "LEFT", "RIGHT"]
 POPULATION = initGeneration(INPUTS, OUTPUTS)
 # POPULATION = [copy.deepcopy(loadNetwork("Le_Soat_632.5.json")) for i in range(NB_INDIVIDU)]
 
-    
+
 BEST_INDIVIDU = Network([])
 BEST_INDIVIDU.fitness = 0
 
 CHECKLOOP = 0
 CHECKLOOPPOSITION = []
+COMPTEUR_GENERATION = 1
+COMPTEUR_INDIVIDU = 1
 
 # ------------------- PYGAME ------------------- #
 
@@ -42,16 +44,16 @@ def drawSnake(snakeList):
 def fitnessPenaliteTailleSnake(individu):
     nbNeurones = 0
     nbConnexions = 0
-    
+
     for layer in individu.layers:
         if layer.label != "InputLayer":
             for neurone in layer.neurones:
                 nbNeurones += 1
                 for input in neurone.inputs:
                     nbConnexions += 1
-    
+
     return  -PENALITE_TAILLE * (nbNeurones + nbConnexions)
-    
+
 def generateFoodPosition(premierePomme=False):
     """Génère une position aléatoire pour la pomme qui n'est pas sur le corps du serpent."""
 
@@ -79,9 +81,9 @@ def generateFoodPositionHybride(apprentissageDirige=3):
 
 def generateFoodPositionTemplate():
     coordinates = []
-    
+
     foodPosition = [DIS_WIDTH // SNAKE_BLOCK // 2, DIS_HEIGHT // SNAKE_BLOCK // 2]
-    
+
     for j in range(1, DIS_HEIGHT // SNAKE_BLOCK // 2 + 1):
         if j % 2 == 1:
             for i in range(DIS_WIDTH // SNAKE_BLOCK - 1):
@@ -89,10 +91,10 @@ def generateFoodPositionTemplate():
         else:
             for i in range(DIS_WIDTH // SNAKE_BLOCK - 2, -1, -1):
                 coordinates.append((i, foodPosition[1] - j))
-    
+
     for j in range(0, DIS_HEIGHT // SNAKE_BLOCK):
         coordinates.append((DIS_WIDTH // SNAKE_BLOCK - 1, j))
-    
+
     for j in range(DIS_HEIGHT // SNAKE_BLOCK - 1, DIS_HEIGHT // SNAKE_BLOCK // 2 , -1):
         if j % 2 == 1:
             for i in range(DIS_WIDTH // SNAKE_BLOCK - 2, -1, -1):
@@ -100,7 +102,7 @@ def generateFoodPositionTemplate():
         else:
             for i in range(DIS_WIDTH // SNAKE_BLOCK - 1):
                 coordinates.append((i, j))
-    
+
     for i in range(DIS_WIDTH // SNAKE_BLOCK - 2, -1, -1):
         coordinates.append((i, foodPosition[1]))
 
@@ -157,7 +159,7 @@ def getDirectionalInputs(snakeList, foodPosition, grille):
 
     tailleSerpentRelativeGrille = len(snakeList) / (grille.size)
     nbCasesLibresRelativeGrille = np.count_nonzero(grille == 0) / grille.size
-    
+
     return vision + directionOneHot + [positionRelativePommeX, positionRelativePommeY, tailleSerpentRelativeGrille, nbCasesLibresRelativeGrille]
 
 def casesAccessibles(grille, positionTete):
@@ -202,13 +204,15 @@ def finalFitnessAdjustments(individu, snakeList, grille, historiquePositions, mo
 all_counts = []
 all_fitnesses = []
 all_generation = []
+all_apples = []
+all_ends = []
 
 def gameLoop():
-    global BEST_INDIVIDU, SNAKE_SPEED, CHECKLOOP, CHECKLOOPPOSITION, all_counts, all_fitnesses, all_generation
+    global BEST_INDIVIDU, SNAKE_SPEED, CHECKLOOP, CHECKLOOPPOSITION, all_counts, all_fitnesses, all_generation, all_apples, all_ends 
 
     gameOver = False
     gameClose = False
-    
+
     deplacementsSnake = []
     movesSinceLastApple = 0
     historiquePositions = []
@@ -220,7 +224,7 @@ def gameLoop():
 
     # Positionnement initial de la pomme
     # foodPosition = generateFoodPosition(True)
-    
+
     listeFoodPosition = generateFoodPositionHybride()
     # listeFoodPosition = generateFoodPositionTemplate()
     compteurPomme = 0
@@ -232,39 +236,47 @@ def gameLoop():
     previousDistance = GRILLE.distanceManhattan(snakeList[-1], foodPosition)
 
     INDIVIDU = POPULATION[COMPTEUR_INDIVIDU - 1]
-    # INDIVIDU.fitness = 0
-    INDIVIDU.fitness = fitnessPenaliteTailleSnake(INDIVIDU)
-    
+    INDIVIDU.fitness = 0
+    # INDIVIDU.fitness = fitnessPenaliteTailleSnake(INDIVIDU)
+
     # INPUTS = GRILLE.matrice.flatten().tolist()
     INPUTS = getDirectionalInputs(snakeList, foodPosition, GRILLE.matrice)
     INDIVIDU.miseAJourInputValue(INPUTS)
 
+    causeDeLaMort = "Aucune"
+
     while not gameOver:
-        
-        while gameClose: 
-                 
+
+        while gameClose:
+            all_counts.append(COMPTEUR_INDIVIDU)
+            all_fitnesses.append(INDIVIDU.fitness - 1)
+            all_generation.append(COMPTEUR_GENERATION)
+            all_apples.append(compteurPomme)
+            all_ends.append(causeDeLaMort)
+
             isIdiot = True
             premierDeplacement = deplacementsSnake[0]
             for deplacement in deplacementsSnake[1:]:
                 if deplacement != premierDeplacement:
                     isIdiot = False
                     break
-            
+
             if isIdiot:
                 INDIVIDU.fitness = PENALITE_IDIOT
+                all_ends[-1] = "Idiot"
             else:
                 print("GENERATION :", COMPTEUR_GENERATION, " INDIVIDU :", COMPTEUR_INDIVIDU, "SCORE :", INDIVIDU.fitness)
                 # saveNetwork(INDIVIDU, f"Save_Network/{COMPTEUR_GENERATION}" + "/" + str(COMPTEUR_INDIVIDU) + "_" + str(INDIVIDU.fitness) + ".json")
                 saveNetwork(INDIVIDU, f"oldGen/{COMPTEUR_INDIVIDU}.json")
                 if INDIVIDU.fitness > BEST_INDIVIDU.fitness:
                     BEST_INDIVIDU = copy.deepcopy(INDIVIDU)
-            
+
             deplacementsSnake = []
             CHECKLOOPPOSITION = []
-            
+
             gameOver = True
             gameClose = False
-        
+
         if gameOver:
             break
 
@@ -275,13 +287,14 @@ def gameLoop():
                 if event.key == pygame.K_RETURN:
                     gameClose = True
                     INDIVIDU.fitness = PENALITE_LOOP
-        
+                    causeDeLaMort = "Boucle infinie"
+
         # Mettre à jour la grille
         GRILLE.updateGrille(snakeList, foodPosition)
         # INPUTS = GRILLE.matrice.flatten().tolist()
         INPUTS = getDirectionalInputs(snakeList, foodPosition, GRILLE.matrice)
         INDIVIDU.miseAJourInputValue(INPUTS)
-        
+
         # print(INPUTS)
         deplacement = INDIVIDU.outputNetwork()
         deplacementsSnake.append(deplacement)
@@ -301,6 +314,7 @@ def gameLoop():
             # Vérification de la collision avec le corps du serpent
             if [headX, headY] in snakeList:
                 INDIVIDU.fitness += PENALITE_COLLISION
+                causeDeLaMort = "Collision avec lui-même"
                 gameClose = True
                 # print("penalité collision avec lui même")
 
@@ -339,13 +353,14 @@ def gameLoop():
 
             # Mettre à jour la grille
             GRILLE.updateGrille(snakeList, foodPosition)
-                
+
             if GRILLE.matrice.flatten().tolist() in CHECKLOOPPOSITION:
                 INDIVIDU.fitness += PENALITE_LOOP
+                causeDeLaMort = "Boucle infinie"
                 CHECKLOOPPOSITION = []
                 gameClose = True
                 # print("penalité boucle infinie")
-                
+
             CHECKLOOPPOSITION.append(GRILLE.matrice.flatten().tolist())
             if len(CHECKLOOPPOSITION) > CHECKLOOP_MAX_SIZE:
                 CHECKLOOPPOSITION.pop(0)
@@ -357,55 +372,60 @@ def gameLoop():
 
             CLOCK.tick(SNAKE_SPEED)
         else:
-            if len(deplacementsSnake) < 10:
-                INDIVIDU.fitness += PENALITE_SORTIE # Penalité pour sortie de l'écran
+            INDIVIDU.fitness += PENALITE_SORTIE # Penalité pour sortie de l'écran
+            causeDeLaMort = "Sortie de l'écran"
             # print("penalité sortie de l'écran")
             gameClose = True
 
 # ------------------- Save Data ------------------- #
 def saveData(COMPTEUR_GENERATION):
-    global all_counts, all_fitnesses, all_generation
+    global all_counts, all_fitnesses, all_generation, all_apples
     final_data = pd.DataFrame({
         "Generation" : all_generation,
         "Individu": all_counts,
         "Score": all_fitnesses,
+        "NbPommes": all_apples,
+        "Causes de Mort": all_ends
     })
-
     final_data.to_csv(f"Save_Data/Generation_{COMPTEUR_GENERATION}.csv", index=False)
     print(f"----------------- Data pour Generation {COMPTEUR_GENERATION} -------------------------------")
 
 # ------------------- SNAKE ------------------- #
+
 while COMPTEUR_GENERATION <= NB_GENERATION:
     print("GENERATION :", COMPTEUR_GENERATION)
     os.makedirs(f"Save_Network/{COMPTEUR_GENERATION}", exist_ok=True)
-    
+
     folder = "oldGen"
     suppressionContenuDossier(folder)
-    
+
     while COMPTEUR_INDIVIDU <= NB_INDIVIDU:
         gameLoop()
         COMPTEUR_INDIVIDU += 1
-    
-       
+
+
     populationSelectionne = chargerTousLesFichiersDUnDossier(folder)
 
     saveData(COMPTEUR_GENERATION)
 
+
     all_counts = []
     all_fitnesses = []
     all_generation = []
+    all_apples = []
+    all_ends = []
 
     if POPULATION != []:
         supprimerProprementPopulation(POPULATION)
-                
+
     POPULATION = nouvelleGeneration(populationSelectionne, INPUTS, OUTPUTS)
-    
+
     if populationSelectionne != []:
         supprimerProprementPopulation(populationSelectionne)
-        
+
     gc.collect()
-      
-    # POPULATION = nouvelleGeneration(POPULATION, INPUTS, OUTPUTS)   
+
+    # POPULATION = nouvelleGeneration(POPULATION, INPUTS, OUTPUTS)
     COMPTEUR_INDIVIDU = 1
     COMPTEUR_GENERATION += 1
 

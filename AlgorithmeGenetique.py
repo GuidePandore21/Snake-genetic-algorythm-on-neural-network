@@ -755,10 +755,10 @@ def selectionParAdaptation(population):
     """Sélectionne les individus selon une Roulette Wheel Selection, même avec des fitness négatives."""
     
     min_fitness = min(individu.fitness for individu in population)
-    if len(population) < int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION + 1):
+    if len(population) < int(NB_INDIVIDU * ELITE_RATIO_ADAPTATION + 1):
         nbSelectionnes = len(population)
     else:
-        nbSelectionnes = int(NB_INDIVIDU * ELITE * ELITE_RATIO_ADAPTATION + 1)
+        nbSelectionnes = int(NB_INDIVIDU * ELITE_RATIO_ADAPTATION + 1)
 
     # Décaler les fitness pour qu'elles soient toutes positives
     if min_fitness < 0:
